@@ -695,6 +695,16 @@ body {
   background: linear-gradient(135deg, #db1220 0%, #8a0510 100%);
 }
 
+.modal-note {
+  margin-top: 12px;
+  font-family: 'Playfair Display', serif;
+  font-size: 11px;
+  line-height: 1.45;
+  color: rgba(230, 213, 184, 0.8);
+  text-align: center;
+  letter-spacing: 0.4px;
+}
+
 .success-msg {
   display: none;
   margin-top: 14px;
