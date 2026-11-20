@@ -13,7 +13,7 @@
       font-family: 'Playfair Display', serif;
       padding: 20px;
     }
-    .container { max-width: 900px; margin: 0 auto; }
+    .container { max-width: 800px; margin: 0 auto; }
     h1 {
       font-family: 'Cinzel', serif;
       color: #ff3b49;
@@ -60,17 +60,8 @@
     }
     .table-wrap { overflow-x: auto; border: 1px solid rgba(212, 175, 115, 0.4); border-radius: 4px; }
     table { width: 100%; border-collapse: collapse; background: #0d0505; font-size: 14px; }
-    th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid rgba(212, 175, 115, 0.2); }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid rgba(212, 175, 115, 0.2); }
     th { font-family: 'Cinzel', serif; font-size: 11px; color: #f3d299; background: #1a0709; letter-spacing: 1px; }
-    .badge-vip {
-      background: #5e030a;
-      color: #f3d299;
-      border: 1px solid #d4af73;
-      padding: 3px 8px;
-      border-radius: 3px;
-      font-family: monospace;
-      font-size: 13px;
-    }
     .btn-check {
       padding: 6px 12px;
       border-radius: 3px;
@@ -82,15 +73,6 @@
     }
     .btn-pendiente { background: #1c0c0c; color: #e6d5b8; }
     .btn-asistio { background: #156e2d; color: #fff; border-color: #4ade80; }
-    .nota-input {
-      background: #160909;
-      border: 1px solid rgba(212, 175, 115, 0.35);
-      color: #fff;
-      padding: 5px 8px;
-      width: 140px;
-      font-size: 13px;
-      border-radius: 3px;
-    }
   </style>
 </head>
 <body>
@@ -110,21 +92,19 @@
       </div>
     </div>
 
-    <input type="text" id="buscador" class="search-box" placeholder="Buscar por nombre, colegio o código VIP...">
+    <input type="text" id="buscador" class="search-box" placeholder="Buscar por nombre o colegio...">
 
     <div class="table-wrap">
       <table>
         <thead>
           <tr>
-            <th>CÓDIGO</th>
             <th>NOMBRE COMPLETO</th>
             <th>COLEGIO / PROCEDENCIA</th>
             <th>ASISTENCIA</th>
-            <th>ANOTACIÓN</th>
           </tr>
         </thead>
         <tbody id="tablaInvitados">
-          <tr><td colspan="5" style="text-align:center;">Cargando lista...</td></tr>
+          <tr><td colspan="3" style="text-align:center;">Cargando lista...</td></tr>
         </tbody>
       </table>
     </div>
@@ -145,7 +125,7 @@
         .order('id', { ascending: false });
 
       if (error) {
-        document.getElementById('tablaInvitados').innerHTML = '<tr><td colspan="5">Error al conectar con la base de datos.</td></tr>';
+        document.getElementById('tablaInvitados').innerHTML = '<tr><td colspan="3">Error al conectar con la base de datos.</td></tr>';
         return;
       }
 
@@ -162,13 +142,12 @@
     function renderizarTabla(datos) {
       const tbody = document.getElementById('tablaInvitados');
       if (datos.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hay registros todavía.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No hay registros todavía.</td></tr>';
         return;
       }
 
       tbody.innerHTML = datos.map(inv => `
         <tr>
-          <td><span class="badge-vip">${inv.codigo_vip}</span></td>
           <td><strong>${inv.nombre_completo}</strong></td>
           <td>${inv.colegio}</td>
           <td>
@@ -178,15 +157,6 @@
             >
               ${inv.asistio ? '✓ ASISTIÓ' : 'MARCAR INGRESO'}
             </button>
-          </td>
-          <td>
-            <input 
-              type="text" 
-              class="nota-input" 
-              value="${inv.notas || ''}" 
-              placeholder="Escribir nota..."
-              onchange="guardarNota(${inv.id}, this.value)"
-            >
           </td>
         </tr>
       `).join('');
@@ -200,18 +170,11 @@
       filtrar();
     }
 
-    async function guardarNota(id, textoNota) {
-      await db.from('invitados').update({ notas: textoNota }).eq('id', id);
-      const item = listaGlobal.find(i => i.id === id);
-      if (item) item.notas = textoNota;
-    }
-
     function filtrar() {
       const texto = document.getElementById('buscador').value.toLowerCase();
       const filtrados = listaGlobal.filter(i =>
         i.nombre_completo.toLowerCase().includes(texto) ||
-        i.colegio.toLowerCase().includes(texto) ||
-        i.codigo_vip.toLowerCase().includes(texto)
+        i.colegio.toLowerCase().includes(texto)
       );
       renderizarTabla(filtrados);
     }
