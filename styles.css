@@ -705,3 +705,166 @@ body {
   line-height: 1.5;
   color: #f3d299;
 }
+
+/* ================= ADAPTACIÓN RESPONSIVA PARA CELULARES ================= */
+@media (max-width: 540px) {
+  body {
+    padding: 10px 6px;
+    overflow-x: hidden;
+  }
+
+  .invitation-card {
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    min-height: 640px;
+    padding: 18px 14px 26px 14px;
+  }
+
+  .inner-border {
+    inset: 8px;
+  }
+
+  /* Ajuste de títulos principales para que no se desborden */
+  .xv-title {
+    font-size: 48px;
+  }
+
+  .vibes-neon {
+    font-size: 38px;
+  }
+
+  .quince-subtitle {
+    font-size: 10.5px;
+    letter-spacing: 2.5px;
+  }
+
+  .celebrate-text {
+    font-size: 8.5px;
+    letter-spacing: 1.4px;
+  }
+
+  .quinceanera-name {
+    font-size: 27px;
+  }
+
+  /* Elementos laterales ("Brindemos..." y "Reina de la noche") más compactos */
+  .side-cheers {
+    left: 14px;
+    top: 215px;
+  }
+
+  .side-cheers .script-gold {
+    font-size: 21px;
+  }
+
+  .side-cheers .sub {
+    font-size: 7px;
+    letter-spacing: 1px;
+  }
+
+  .lucky-card {
+    right: 12px;
+    top: 205px;
+    width: 66px;
+    height: 92px;
+  }
+
+  .lucky-card .script-gold {
+    font-size: 21px;
+  }
+
+  .lucky-card .sub {
+    font-size: 6.5px;
+    letter-spacing: 1px;
+  }
+
+  /* Columnas Fecha, Hora, Lugar ajustadas al ancho móvil */
+  .details-grid {
+    margin-top: 16px;
+  }
+
+  .detail-col {
+    padding: 0 4px;
+  }
+
+  .detail-label {
+    font-size: 7.5px;
+    letter-spacing: 1.3px;
+  }
+
+  .detail-value {
+    font-size: 8px;
+    letter-spacing: 0.5px;
+  }
+
+  .detail-sub {
+    font-size: 7px;
+    letter-spacing: 1px;
+  }
+
+  .location-btn {
+    padding: 4px 6px;
+    font-size: 6.5px;
+    letter-spacing: 0.8px;
+  }
+
+  /* Frase inferior y Dress Code */
+  .quote-script {
+    font-size: 31px;
+  }
+
+  .dress-code-text {
+    font-size: 8.5px;
+    letter-spacing: 1.5px;
+  }
+
+  /* Adornos inferiores más pequeños para no tapar el botón */
+  .chip-xv {
+    bottom: 14px;
+    left: 12px;
+    width: 64px;
+    height: 64px;
+    border-width: 4px;
+  }
+
+  .chip-xv::after {
+    width: 42px;
+    height: 42px;
+    font-size: 8px;
+  }
+
+  .chip-bottom-right {
+    bottom: 10px;
+    right: 78px;
+    width: 46px;
+    height: 46px;
+    border-width: 3px;
+    font-size: 14px;
+  }
+
+  .bottom-cards {
+    bottom: 10px;
+    right: 10px;
+  }
+
+  .bottom-card {
+    width: 32px;
+    height: 50px;
+    font-size: 8.5px;
+    margin-left: -18px;
+  }
+
+  .crown-ornament {
+    top: 14px;
+    right: 14px;
+    transform: rotate(15deg) scale(0.75);
+  }
+
+  .martini-top-left {
+    top: 8px;
+    left: 8px;
+    transform: scale(0.75);
+    transform-origin: top left;
+  }
+}
