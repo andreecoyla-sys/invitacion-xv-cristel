@@ -1,0 +1,669 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #141212;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+  font-family: 'Cinzel', serif;
+  gap: 18px;
+}
+
+/* Contenedor principal de la invitación (proporción 5x7) */
+.invitation-card {
+  position: relative;
+  width: 500px;
+  height: 700px;
+  background-color: #050202;
+  background-image: 
+    radial-gradient(circle at 12% 15%, rgba(168, 12, 24, 0.45) 0%, transparent 35%),
+    radial-gradient(circle at 88% 12%, rgba(130, 8, 18, 0.5) 0%, transparent 40%),
+    radial-gradient(circle at 18% 82%, rgba(185, 10, 22, 0.55) 0%, transparent 45%),
+    radial-gradient(circle at 85% 65%, rgba(130, 8, 18, 0.3) 0%, transparent 35%);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+  overflow: hidden;
+  color: #e6d5b8;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 30px;
+}
+
+/* Marco rojo fino interior */
+.inner-border {
+  position: absolute;
+  inset: 12px;
+  border: 1px solid rgba(175, 22, 32, 0.65);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Efecto de satén rojo en la esquina inferior izquierda */
+.satin-drape {
+  position: absolute;
+  bottom: -40px;
+  left: -50px;
+  width: 280px;
+  height: 360px;
+  background: radial-gradient(ellipse at center, #a30815 0%, #520208 55%, transparent 75%);
+  filter: blur(8px);
+  transform: rotate(-18deg);
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Pluma roja superior derecha */
+.feather-glow {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+  width: 190px;
+  height: 190px;
+  background: repeating-radial-gradient(circle at 100% 0%, #6e0610 0px, #2b0104 4px, #8f0a17 8px);
+  border-bottom-left-radius: 100%;
+  opacity: 0.55;
+  filter: blur(2px);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Abanico superior de cartas */
+.top-cards {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 62px;
+  margin-top: 2px;
+  z-index: 5;
+}
+
+.mini-card {
+  width: 34px;
+  height: 48px;
+  background: #090606;
+  border: 1px solid rgba(212, 175, 115, 0.45);
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 3px;
+  font-family: 'Playfair Display', serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #c81422;
+  box-shadow: -2px 2px 6px rgba(0,0,0,0.8);
+  margin: 0 -6px;
+}
+
+.mini-card span.suit {
+  font-size: 9px;
+  line-height: 1;
+}
+
+.mini-card:nth-child(1) { transform: rotate(-22deg) translateY(8px); }
+.mini-card:nth-child(2) { transform: rotate(-11deg) translateY(2px); }
+.mini-card:nth-child(3) { transform: rotate(0deg); }
+.mini-card:nth-child(4) { transform: rotate(11deg) translateY(2px); }
+.mini-card:nth-child(5) { transform: rotate(22deg) translateY(8px); }
+
+/* Textos superiores */
+.are-you-in {
+  margin-top: 8px;
+  font-size: 10.5px;
+  letter-spacing: 3px;
+  color: #e6d5b8;
+  z-index: 5;
+}
+
+.tiny-heart {
+  color: #c81422;
+  font-size: 11px;
+  margin: 2px 0;
+  z-index: 5;
+}
+
+/* Título principal MIS XV */
+.xv-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 62px;
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: 3px;
+  color: #b80d19;
+  text-transform: uppercase;
+  transform: scaleY(1.15);
+  margin-top: 2px;
+  text-shadow: 0 2px 12px rgba(184, 13, 25, 0.35);
+  z-index: 5;
+}
+
+/* Subtítulo Neón Vegas Night */
+.vibes-neon {
+  font-family: 'Alex Brush', cursive;
+  font-size: 48px;
+  color: #ff3b49;
+  line-height: 0.9;
+  margin-top: -2px;
+  text-shadow:
+    0 0 6px #ff1a2b,
+    0 0 14px #d90416,
+    0 0 28px #a3000d;
+  z-index: 6;
+}
+
+.quince-subtitle {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 3.5px;
+  color: #b80d19;
+  z-index: 5;
+}
+
+.celebrate-text {
+  margin-top: 6px;
+  font-size: 9.5px;
+  line-height: 1.5;
+  letter-spacing: 2px;
+  text-align: center;
+  color: #e6d5b8;
+  z-index: 5;
+}
+
+.name-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 2px;
+  z-index: 5;
+}
+
+.quinceanera-name {
+  font-family: 'Alex Brush', cursive;
+  font-size: 32px;
+  color: #f3d299;
+  text-shadow: 0 0 10px rgba(243, 210, 153, 0.65);
+}
+
+.outline-heart {
+  color: #b80d19;
+  font-size: 16px;
+}
+
+/* Elementos laterales flotantes */
+.side-cheers {
+  position: absolute;
+  left: 30px;
+  top: 255px;
+  text-align: center;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.side-cheers .script-gold {
+  font-family: 'Alex Brush', cursive;
+  font-size: 26px;
+  color: #f3d299;
+  text-shadow: 0 0 8px rgba(243, 210, 153, 0.7);
+  display: block;
+  line-height: 0.9;
+}
+
+.side-cheers .sub {
+  font-size: 8.5px;
+  letter-spacing: 1.5px;
+  line-height: 1.4;
+  display: block;
+  margin-top: 4px;
+}
+
+/* Carta inclinada "reina DE LA NOCHE" */
+.lucky-card {
+  position: absolute;
+  right: 26px;
+  top: 240px;
+  width: 80px;
+  height: 108px;
+  background: rgba(8, 5, 5, 0.9);
+  border: 1px solid rgba(212, 175, 115, 0.4);
+  border-radius: 4px;
+  transform: rotate(10deg);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  z-index: 5;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.8);
+}
+
+.lucky-card .script-gold {
+  font-family: 'Alex Brush', cursive;
+  font-size: 26px;
+  color: #f3d299;
+  text-shadow: 0 0 8px rgba(243, 210, 153, 0.7);
+  line-height: 1;
+}
+
+.lucky-card .sub {
+  font-size: 8px;
+  letter-spacing: 1.3px;
+  margin-top: 4px;
+}
+
+/* Sección de 3 columnas (Fecha, Hora, Lugar) */
+.details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  width: 100%;
+  margin-top: 12px;
+  z-index: 5;
+  text-align: center;
+}
+
+.detail-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 8px;
+}
+
+.detail-col:not(:last-child) {
+  border-right: 1px solid rgba(212, 175, 115, 0.35);
+}
+
+.detail-icon {
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+
+.detail-label {
+  font-size: 8.5px;
+  letter-spacing: 2px;
+  color: #b80d19;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.detail-value {
+  font-size: 9.5px;
+  letter-spacing: 1px;
+  color: #e6d5b8;
+  margin-bottom: 3px;
+}
+
+.detail-sub {
+  font-size: 8px;
+  letter-spacing: 1.5px;
+  color: #b80d19;
+  font-weight: 600;
+}
+
+/* Botón de ubicación en la columna LUGAR */
+.location-btn {
+  display: inline-block;
+  margin-top: 3px;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, #9e0914 0%, #5e030a 100%);
+  color: #f3d299;
+  border: 1px solid #d4af73;
+  border-radius: 3px;
+  font-size: 7.5px;
+  font-weight: 700;
+  letter-spacing: 1.3px;
+  text-decoration: none;
+  box-shadow: 0 0 10px rgba(217, 22, 38, 0.45);
+  transition: all 0.25s ease;
+}
+
+.location-btn:hover {
+  background: linear-gradient(135deg, #c90e1c 0%, #7a040d 100%);
+  box-shadow: 0 0 15px rgba(255, 42, 60, 0.8);
+  transform: translateY(-1px);
+}
+
+/* Frase inferior ("Que comience el juego") */
+.quote-section {
+  margin-top: 12px;
+  text-align: center;
+  z-index: 5;
+}
+
+.quote-top {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #e6d5b8;
+}
+
+.quote-script {
+  font-family: 'Alex Brush', cursive;
+  font-size: 38px;
+  color: #ff2a3c;
+  text-shadow: 
+    0 0 8px #ff1a2b,
+    0 0 16px rgba(217, 22, 38, 0.75);
+  margin-top: 2px;
+  line-height: 1;
+}
+
+/* Sección Dress Code horizontal */
+.dress-code-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 8px;
+  z-index: 5;
+}
+
+.dress-code-text {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #e6d5b8;
+}
+
+.color-swatches {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.swatch {
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid #e6d5b8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+}
+
+.swatch.burgundy { background-color: #5c0204; }
+.swatch.red { background-color: #8f0306; }
+.swatch.black { background-color: #050404; }
+
+/* RSVP Footer con flechita */
+.rsvp-section {
+  margin-top: 8px;
+  text-align: center;
+  z-index: 12;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.rsvp-bottom {
+  font-size: 8.5px;
+  letter-spacing: 1.8px;
+  color: #e6d5b8;
+}
+
+.down-arrow {
+  margin: 4px 0 3px 0;
+  line-height: 1;
+  animation: bounceArrow 1.4s infinite ease-in-out;
+}
+
+@keyframes bounceArrow {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+/* Botón inferior para abrir el cuestionario */
+.open-rsvp-btn {
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #9e0914 0%, #5e030a 100%);
+  color: #f3d299;
+  border: 1px solid #d4af73;
+  border-radius: 3px;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(217, 22, 38, 0.55);
+  transition: all 0.25s ease;
+  z-index: 12;
+}
+
+.open-rsvp-btn:hover {
+  background: linear-gradient(135deg, #c90e1c 0%, #7a040d 100%);
+  box-shadow: 0 0 22px rgba(255, 42, 60, 0.85);
+  transform: translateY(-1px);
+}
+
+/* Ficha de casino principal XV */
+.chip-xv {
+  position: absolute;
+  bottom: 42px;
+  left: 36px;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #8f0914 55%, #1a0507 56%);
+  border: 6px dashed #d4af73;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.9), inset 0 0 10px rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4;
+  transform: rotate(-12deg);
+}
+
+.chip-xv::after {
+  content: "MIS XV";
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 175, 115, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  color: #f3d299;
+  background: #420308;
+}
+
+.chip-bottom-right {
+  position: absolute;
+  bottom: 14px;
+  right: 120px;
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: #0d0909;
+  border: 5px dashed #d4af73;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #d4af73;
+  font-size: 20px;
+  z-index: 4;
+}
+
+/* Abanico inferior derecho de cartas */
+.bottom-cards {
+  position: absolute;
+  bottom: 16px;
+  right: 18px;
+  display: flex;
+  z-index: 3;
+}
+
+.bottom-card {
+  width: 44px;
+  height: 68px;
+  background: #080606;
+  border: 1px solid rgba(212, 175, 115, 0.35);
+  border-radius: 4px;
+  padding: 4px;
+  font-family: 'Playfair Display', serif;
+  font-size: 11px;
+  color: #b80d19;
+  margin-left: -24px;
+  box-shadow: -3px 0 8px rgba(0,0,0,0.85);
+}
+
+.bottom-card:nth-child(1) { transform: rotate(-32deg) translateY(14px); }
+.bottom-card:nth-child(2) { transform: rotate(-20deg) translateY(7px); }
+.bottom-card:nth-child(3) { transform: rotate(-8deg) translateY(2px); }
+.bottom-card:nth-child(4) { transform: rotate(4deg); }
+.bottom-card:nth-child(5) { transform: rotate(16deg) translateY(4px); }
+
+/* Copa Mocktail decorativa superior izquierda */
+.martini-top-left {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 110px;
+  height: 150px;
+  opacity: 0.75;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* Corona / Tiara dorada superior derecha */
+.crown-ornament {
+  position: absolute;
+  top: 22px;
+  right: 28px;
+  z-index: 3;
+  pointer-events: none;
+  transform: rotate(15deg);
+}
+
+/* ================= ESTILOS DEL CUESTIONARIO (MODAL) ================= */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(4px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  padding: 20px;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-box {
+  position: relative;
+  width: 100%;
+  max-width: 390px;
+  background: #080303;
+  border: 1.5px solid #d4af73;
+  box-shadow: 0 0 35px rgba(184, 13, 25, 0.6);
+  padding: 28px 26px;
+  color: #e6d5b8;
+  text-align: center;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: none;
+  border: none;
+  color: #d4af73;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.modal-title {
+  font-family: 'Alex Brush', cursive;
+  font-size: 38px;
+  color: #ff3b49;
+  text-shadow: 0 0 10px rgba(255, 26, 43, 0.7);
+  line-height: 1;
+}
+
+.modal-sub {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: #f3d299;
+  margin-top: 6px;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 1.8px;
+  color: #d4af73;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  background: #120909;
+  border: 1px solid rgba(212, 175, 115, 0.55);
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  outline: none;
+}
+
+.form-group input:focus {
+  border-color: #ff3b49;
+  box-shadow: 0 0 8px rgba(255, 59, 73, 0.4);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 11px;
+  margin-top: 6px;
+  background: linear-gradient(135deg, #b80d19 0%, #6b040c 100%);
+  border: 1px solid #f3d299;
+  color: #f3d299;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.submit-btn:hover {
+  background: linear-gradient(135deg, #db1220 0%, #8a0510 100%);
+}
+
+.success-msg {
+  display: none;
+  margin-top: 14px;
+  padding: 10px;
+  border: 1px solid #d4af73;
+  background: rgba(212, 175, 115, 0.1);
+  font-size: 11px;
+  line-height: 1.5;
+  color: #f3d299;
+}
