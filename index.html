@@ -11,15 +11,19 @@
 </head>
 <body>
 
-  <!-- Definición de la botella de trago solo para los dos elementos laterales -->
+  <!-- Definición de la cajita de regalo dorada y roja -->
   <svg width="0" height="0" style="position:absolute;">
     <defs>
-      <symbol id="liquor-bottle" viewBox="0 0 24 44">
-        <rect x="9.5" y="1" width="5" height="3.5" rx="0.8" fill="#f3d299"/>
-        <path d="M10 4.5 H14 V13 L18 18.5 V40 C18 41.5 16.8 42.5 15.3 42.5 H8.7 C7.2 42.5 6 41.5 6 40 V18.5 L10 13 Z" stroke="#d4af73" stroke-width="1.6" fill="#090404"/>
-        <path d="M7.3 25 H16.7 V39.5 C16.7 40.5 16 41.2 15 41.2 H9 C8 41.2 7.3 40.5 7.3 39.5 Z" fill="#b80d19"/>
-        <rect x="8.2" y="21.5" width="7.6" height="6.5" rx="0.6" fill="#140707" stroke="#f3d299" stroke-width="0.9"/>
-        <circle cx="12" cy="24.7" r="1.2" fill="#f3d299"/>
+      <symbol id="gift-box" viewBox="0 0 32 32">
+        <!-- Caja -->
+        <rect x="6" y="14" width="20" height="14" rx="1.5" fill="#140707" stroke="#d4af73" stroke-width="1.6"/>
+        <!-- Tapa -->
+        <rect x="4" y="10" width="24" height="4.5" rx="1" fill="#090404" stroke="#f3d299" stroke-width="1.5"/>
+        <!-- Cinta vertical roja -->
+        <rect x="14.2" y="10" width="3.6" height="18" fill="#c81422"/>
+        <!-- Lazo superior dorado -->
+        <path d="M16 10 C12 4, 7 7, 11 10 Z" fill="none" stroke="#f3d299" stroke-width="1.5"/>
+        <path d="M16 10 C20 4, 25 7, 21 10 Z" fill="none" stroke="#f3d299" stroke-width="1.5"/>
       </symbol>
     </defs>
   </svg>
@@ -78,11 +82,11 @@
       <span class="outline-heart">♡</span>
     </div>
 
-    <!-- Texto lateral izquierdo (con botella de trago) -->
+    <!-- Texto lateral izquierdo (No olvides llevar regalo + cajita de regalo) -->
     <div class="side-cheers">
-      <span class="script-gold">brindemos</span>
-      <span class="sub">POR SUS<br>15 AÑOS</span>
-      <svg width="15" height="26" style="margin-top: 3px;"><use href="#liquor-bottle"/></svg>
+      <span class="script-gold">No olvides</span>
+      <span class="sub">LLEVAR<br>REGALO</span>
+      <svg width="24" height="24" style="margin-top: 4px;"><use href="#gift-box"/></svg>
     </div>
 
     <!-- Carta lateral derecha -->
