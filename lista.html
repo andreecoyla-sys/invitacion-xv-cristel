@@ -16,7 +16,12 @@
       <p>CONTROL DE PUERTA • MIS XV</p>
       <form id="loginForm">
         <input type="email" id="adminEmail" class="login-input" placeholder="Correo de administrador" required>
-        <input type="password" id="adminPassword" class="login-input" placeholder="Contraseña" required>
+        
+        <div class="password-wrap">
+          <input type="password" id="adminPassword" class="login-input" placeholder="Contraseña" required>
+          <button type="button" class="toggle-pass" id="togglePass" title="Mostrar/Ocultar contraseña">👁</button>
+        </div>
+
         <button type="submit" class="btn-login" id="btnLogin">INGRESAR AL PANEL</button>
         <div class="login-error" id="loginError">Correo o contraseña incorrectos.</div>
       </form>

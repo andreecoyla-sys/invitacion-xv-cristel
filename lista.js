@@ -6,8 +6,17 @@ const loginScreen = document.getElementById('loginScreen');
 const panelScreen = document.getElementById('panelScreen');
 const loginForm = document.getElementById('loginForm');
 const loginError = document.getElementById('loginError');
+const togglePass = document.getElementById('togglePass');
+const adminPassword = document.getElementById('adminPassword');
 
 let listaGlobal = [];
+
+// Mostrar u ocultar contraseña
+togglePass.addEventListener('click', () => {
+  const esOculta = adminPassword.type === 'password';
+  adminPassword.type = esOculta ? 'text' : 'password';
+  togglePass.textContent = esOculta ? '🙈' : '👁';
+});
 
 // Verificar si ya hay una sesión activa al abrir la página
 async function verificarSesion() {
@@ -35,7 +44,7 @@ loginForm.addEventListener('submit', async (e) => {
   btnLogin.textContent = 'VERIFICANDO...';
 
   const email = document.getElementById('adminEmail').value.trim();
-  const password = document.getElementById('adminPassword').value;
+  const password = adminPassword.value;
 
   const { error } = await db.auth.signInWithPassword({ email, password });
 
@@ -57,6 +66,8 @@ document.getElementById('btnLogout').addEventListener('click', async () => {
   panelScreen.style.display = 'none';
   loginScreen.style.display = 'flex';
   loginForm.reset();
+  adminPassword.type = 'password';
+  togglePass.textContent = '👁';
 });
 
 async function cargarInvitados() {

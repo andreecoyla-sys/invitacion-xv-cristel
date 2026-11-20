@@ -64,6 +64,36 @@ body {
   border-color: #ff3b49;
 }
 
+.password-wrap {
+  position: relative;
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.password-wrap .login-input {
+  margin-bottom: 0;
+  padding-right: 40px;
+}
+
+.toggle-pass {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #d4af73;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  opacity: 0.8;
+}
+
+.toggle-pass:hover {
+  opacity: 1;
+  color: #f3d299;
+}
+
 .btn-login {
   width: 100%;
   padding: 11px;
