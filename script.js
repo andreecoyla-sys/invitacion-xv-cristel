@@ -1,6 +1,6 @@
 // 1. Credenciales de Supabase
-const SUPABASE_URL = 'https://wvykyrjebtayldqsfitc.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind2eWt5cmplYnRheWxkcXNmbHRjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTUxNDE0NDgsImV4cCI6MjExMDcxNzQ0OH0.1ady6AecELJpTO_CILi2m82YbkxKUDuQTix4Ic7RrqQ';
+const SUPABASE_URL = 'https://wvykyrjebtayldqsfltc.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_zhCD-gCE5bMkm-3RvCUQ4Q_kv7wfjtl';
 const db = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
 const modal = document.getElementById('rsvpModal');
