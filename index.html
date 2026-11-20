@@ -203,8 +203,22 @@
         </div>
 
         <div class="form-group">
-          <label for="colegio">COLEGIO</label>
-          <input type="text" id="colegio" placeholder="¿De qué colegio vienes?" required>
+          <label>¿ESTUDIAS EN EL COLEGIO?</label>
+          <div class="radio-options">
+            <label class="radio-card">
+              <input type="radio" name="tipoInvitado" value="colegio" checked>
+              <span>Colegio</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="tipoInvitado" value="no_colegio">
+              <span>No estoy en el colegio</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" id="grupoNombreColegio">
+          <label for="nombreColegio">NOMBRE DE TU COLEGIO</label>
+          <input type="text" id="nombreColegio" placeholder="Escribe el nombre de tu colegio" required>
         </div>
 
         <button type="submit" class="submit-btn">ENVIAR CONFIRMACIÓN</button>
@@ -214,6 +228,8 @@
     </div>
   </div>
 
+  <!-- Librería oficial de Supabase + Script principal -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="script.js"></script>
 </body>
 </html>

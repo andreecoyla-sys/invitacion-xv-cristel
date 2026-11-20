@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel VIP - Mis XV Cristel Villegas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #080303;
+      color: #e6d5b8;
+      font-family: 'Playfair Display', serif;
+      padding: 20px;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    h1 {
+      font-family: 'Cinzel', serif;
+      color: #ff3b49;
+      text-align: center;
+      font-size: 26px;
+      margin-bottom: 6px;
+      text-shadow: 0 0 12px rgba(255, 59, 73, 0.5);
+    }
+    .subtitle {
+      text-align: center;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #f3d299;
+      margin-bottom: 20px;
+    }
+    .stats {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .stat-card {
+      background: #120606;
+      border: 1px solid #d4af73;
+      padding: 12px 20px;
+      text-align: center;
+      border-radius: 4px;
+      flex: 1;
+      max-width: 200px;
+    }
+    .stat-num { font-size: 26px; font-weight: bold; color: #f3d299; }
+    .stat-label { font-family: 'Cinzel', serif; font-size: 10px; letter-spacing: 1px; color: #b80d19; margin-top: 4px; }
+    .search-box {
+      width: 100%;
+      padding: 12px 15px;
+      background: #140808;
+      border: 1px solid #d4af73;
+      color: #fff;
+      font-size: 15px;
+      margin-bottom: 18px;
+      border-radius: 4px;
+      outline: none;
+    }
+    .table-wrap { overflow-x: auto; border: 1px solid rgba(212, 175, 115, 0.4); border-radius: 4px; }
+    table { width: 100%; border-collapse: collapse; background: #0d0505; font-size: 14px; }
+    th, td { padding: 12px 10px; text-align: left; border-bottom: 1px solid rgba(212, 175, 115, 0.2); }
+    th { font-family: 'Cinzel', serif; font-size: 11px; color: #f3d299; background: #1a0709; letter-spacing: 1px; }
+    .badge-vip {
+      background: #5e030a;
+      color: #f3d299;
+      border: 1px solid #d4af73;
+      padding: 3px 8px;
+      border-radius: 3px;
+      font-family: monospace;
+      font-size: 13px;
+    }
+    .btn-check {
+      padding: 6px 12px;
+      border-radius: 3px;
+      border: 1px solid #d4af73;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      font-weight: bold;
+    }
+    .btn-pendiente { background: #1c0c0c; color: #e6d5b8; }
+    .btn-asistio { background: #156e2d; color: #fff; border-color: #4ade80; }
+    .nota-input {
+      background: #160909;
+      border: 1px solid rgba(212, 175, 115, 0.35);
+      color: #fff;
+      padding: 5px 8px;
+      width: 140px;
+      font-size: 13px;
+      border-radius: 3px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Lista de Invitados VIP</h1>
+    <div class="subtitle">MIS XV • CRISTEL VILLEGAS</div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-num" id="totalRegistrados">0</div>
+        <div class="stat-label">REGISTRADOS</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="totalAsistieron">0</div>
+        <div class="stat-label">EN LA FIESTA</div>
+      </div>
+    </div>
+
+    <input type="text" id="buscador" class="search-box" placeholder="Buscar por nombre, colegio o código VIP...">
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>CÓDIGO</th>
+            <th>NOMBRE COMPLETO</th>
+            <th>COLEGIO / PROCEDENCIA</th>
+            <th>ASISTENCIA</th>
+            <th>ANOTACIÓN</th>
+          </tr>
+        </thead>
+        <tbody id="tablaInvitados">
+          <tr><td colspan="5" style="text-align:center;">Cargando lista...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://wvykyrjebtayldqsfitc.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_zhCD-gCE5bMkm-3RvCUQ4Q_kv7wfjtl';
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    let listaGlobal = [];
+
+    async function cargarInvitados() {
+      const { data, error } = await db
+        .from('invitados')
+        .select('*')
+        .order('id', { ascending: false });
+
+      if (error) {
+        document.getElementById('tablaInvitados').innerHTML = '<tr><td colspan="5">Error al conectar con la base de datos.</td></tr>';
+        return;
+      }
+
+      listaGlobal = data;
+      actualizarContadores();
+      renderizarTabla(listaGlobal);
+    }
+
+    function actualizarContadores() {
+      document.getElementById('totalRegistrados').textContent = listaGlobal.length;
+      document.getElementById('totalAsistieron').textContent = listaGlobal.filter(i => i.asistio).length;
+    }
+
+    function renderizarTabla(datos) {
+      const tbody = document.getElementById('tablaInvitados');
+      if (datos.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;">No hay registros todavía.</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = datos.map(inv => `
+        <tr>
+          <td><span class="badge-vip">${inv.codigo_vip}</span></td>
+          <td><strong>${inv.nombre_completo}</strong></td>
+          <td>${inv.colegio}</td>
+          <td>
+            <button 
+              class="btn-check ${inv.asistio ? 'btn-asistio' : 'btn-pendiente'}" 
+              onclick="cambiarAsistencia(${inv.id}, ${!inv.asistio})"
+            >
+              ${inv.asistio ? '✓ ASISTIÓ' : 'MARCAR INGRESO'}
+            </button>
+          </td>
+          <td>
+            <input 
+              type="text" 
+              class="nota-input" 
+              value="${inv.notas || ''}" 
+              placeholder="Escribir nota..."
+              onchange="guardarNota(${inv.id}, this.value)"
+            >
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    async function cambiarAsistencia(id, nuevoEstado) {
+      await db.from('invitados').update({ asistio: nuevoEstado }).eq('id', id);
+      const item = listaGlobal.find(i => i.id === id);
+      if (item) item.asistio = nuevoEstado;
+      actualizarContadores();
+      filtrar();
+    }
+
+    async function guardarNota(id, textoNota) {
+      await db.from('invitados').update({ notas: textoNota }).eq('id', id);
+      const item = listaGlobal.find(i => i.id === id);
+      if (item) item.notas = textoNota;
+    }
+
+    function filtrar() {
+      const texto = document.getElementById('buscador').value.toLowerCase();
+      const filtrados = listaGlobal.filter(i =>
+        i.nombre_completo.toLowerCase().includes(texto) ||
+        i.colegio.toLowerCase().includes(texto) ||
+        i.codigo_vip.toLowerCase().includes(texto)
+      );
+      renderizarTabla(filtrados);
+    }
+
+    document.getElementById('buscador').addEventListener('input', filtrar);
+    cargarInvitados();
+  </script>
+</body>
+</html>
