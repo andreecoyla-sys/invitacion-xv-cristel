@@ -13,7 +13,7 @@
       font-family: 'Playfair Display', serif;
       padding: 20px;
     }
-    .container { max-width: 800px; margin: 0 auto; }
+    .container { max-width: 850px; margin: 0 auto; }
     h1 {
       font-family: 'Cinzel', serif;
       color: #ff3b49;
@@ -73,6 +73,21 @@
     }
     .btn-pendiente { background: #1c0c0c; color: #e6d5b8; }
     .btn-asistio { background: #156e2d; color: #fff; border-color: #4ade80; }
+    .btn-eliminar {
+      padding: 6px 10px;
+      border-radius: 3px;
+      border: 1px solid #ff3b49;
+      background: #2b090c;
+      color: #ff6b76;
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      font-weight: bold;
+    }
+    .btn-eliminar:hover {
+      background: #b80d19;
+      color: #fff;
+    }
   </style>
 </head>
 <body>
@@ -101,10 +116,11 @@
             <th>NOMBRE COMPLETO</th>
             <th>COLEGIO / PROCEDENCIA</th>
             <th>ASISTENCIA</th>
+            <th>ACCIÓN</th>
           </tr>
         </thead>
         <tbody id="tablaInvitados">
-          <tr><td colspan="3" style="text-align:center;">Cargando lista...</td></tr>
+          <tr><td colspan="4" style="text-align:center;">Cargando lista...</td></tr>
         </tbody>
       </table>
     </div>
@@ -125,7 +141,7 @@
         .order('id', { ascending: false });
 
       if (error) {
-        document.getElementById('tablaInvitados').innerHTML = '<tr><td colspan="3">Error al conectar con la base de datos.</td></tr>';
+        document.getElementById('tablaInvitados').innerHTML = '<tr><td colspan="4">Error al conectar con la base de datos.</td></tr>';
         return;
       }
 
@@ -142,7 +158,7 @@
     function renderizarTabla(datos) {
       const tbody = document.getElementById('tablaInvitados');
       if (datos.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No hay registros todavía.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No hay registros todavía.</td></tr>';
         return;
       }
 
@@ -158,6 +174,14 @@
               ${inv.asistio ? '✓ ASISTIÓ' : 'MARCAR INGRESO'}
             </button>
           </td>
+          <td>
+            <button 
+              class="btn-eliminar" 
+              onclick="eliminarInvitado(${inv.id}, '${inv.nombre_completo.replace(/'/g, "\\'")}')"
+            >
+              ELIMINAR
+            </button>
+          </td>
         </tr>
       `).join('');
     }
@@ -166,6 +190,21 @@
       await db.from('invitados').update({ asistio: nuevoEstado }).eq('id', id);
       const item = listaGlobal.find(i => i.id === id);
       if (item) item.asistio = nuevoEstado;
+      actualizarContadores();
+      filtrar();
+    }
+
+    async function eliminarInvitado(id, nombre) {
+      const confirmar = confirm(`¿Seguro que deseas eliminar a "${nombre}" de la lista?`);
+      if (!confirmar) return;
+
+      const { error } = await db.from('invitados').delete().eq('id', id);
+      if (error) {
+        alert('No se pudo eliminar el registro. Verifica las políticas DELETE en Supabase.');
+        return;
+      }
+
+      listaGlobal = listaGlobal.filter(i => i.id !== id);
       actualizarContadores();
       filtrar();
     }
