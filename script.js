@@ -42,14 +42,6 @@ radiosTipo.forEach(radio => {
   });
 });
 
-// Generar código único para el pase VIP (ej. XV-842K)
-function generarCodigoVIP() {
-  const num = Math.floor(100 + Math.random() * 900);
-  const letras = 'ABCDEFGHJKLMNPQRSTUVWXYZ';
-  const letra = letras[Math.floor(Math.random() * letras.length)];
-  return `XV-${num}${letra}`;
-}
-
 // Procesar envío del formulario
 formulario.addEventListener('submit', async (evento) => {
   evento.preventDefault();
@@ -59,7 +51,6 @@ formulario.addEventListener('submit', async (evento) => {
   const colegioFinal = opcionElegida === 'colegio' 
     ? inputColegio.value.trim() 
     : 'No estoy en el colegio';
-  const codigoVip = generarCodigoVIP();
 
   const btnSubmit = formulario.querySelector('button[type="submit"]');
   btnSubmit.disabled = true;
@@ -72,7 +63,7 @@ formulario.addEventListener('submit', async (evento) => {
       .insert([{ 
         nombre_completo: nombre, 
         colegio: colegioFinal, 
-        codigo_vip: codigoVip 
+        codigo_vip: 'N/A' 
       }]);
 
     if (error) {
@@ -92,7 +83,7 @@ formulario.addEventListener('submit', async (evento) => {
   mensajeBox.innerHTML = `
     ¡Gracias, <strong>${nombre}</strong>!<br>
     Procedencia: <strong>${colegioFinal}</strong><br>
-    Tu código VIP es: <strong style="font-size:15px; color:#fff;">${codigoVip}</strong>
+    <span style="color:#fff;">¡Tu asistencia ha sido confirmada!</span>
   `;
 
   formulario.reset();
