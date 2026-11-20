@@ -44,16 +44,20 @@ body {
 
 @keyframes neonPulse {
   0%, 100% {
+    color: #ff6b76;
+    opacity: 1;
     text-shadow:
-      0 0 6px #ff1a2b,
-      0 0 14px #d90416,
-      0 0 28px #a3000d;
+      0 0 6px #ffffff,
+      0 0 14px #ff1a2b,
+      0 0 28px #ff0015,
+      0 0 46px #b8000f;
   }
   50% {
+    color: #b81420;
+    opacity: 0.58;
     text-shadow:
-      0 0 3px #ff1a2b,
-      0 0 8px #d90416,
-      0 0 16px #a3000d;
+      0 0 2px #800610,
+      0 0 6px #4a0208;
   }
 }
 
@@ -210,14 +214,14 @@ body {
   z-index: 5;
 }
 
-/* Subtítulo Neón Vegas Night con brillo pulsante */
+/* Subtítulo Neón Vegas Night con brillo pulsante intenso */
 .vibes-neon {
   font-family: 'Alex Brush', cursive;
   font-size: 48px;
   color: #ff3b49;
   line-height: 0.9;
   margin-top: -2px;
-  animation: neonPulse 3.2s ease-in-out infinite;
+  animation: neonPulse 2.2s ease-in-out infinite;
   z-index: 6;
 }
 
@@ -416,7 +420,7 @@ body {
   font-family: 'Alex Brush', cursive;
   font-size: 38px;
   color: #ff2a3c;
-  animation: neonPulse 3.6s ease-in-out infinite;
+  animation: neonPulse 2.5s ease-in-out infinite;
   margin-top: 2px;
   line-height: 1;
 }
