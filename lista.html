@@ -3,263 +3,101 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mis XV Años - Cristel Villegas</title>
+  <title>Lista VIP - Mis XV Cristel Villegas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="lista.css">
 </head>
 <body>
 
-  <!-- Definición de la cajita de regalo dorada y roja -->
-  <svg width="0" height="0" style="position:absolute;">
-    <defs>
-      <symbol id="gift-box" viewBox="0 0 32 32">
-        <!-- Caja -->
-        <rect x="6" y="14" width="20" height="14" rx="1.5" fill="#140707" stroke="#d4af73" stroke-width="1.6"/>
-        <!-- Tapa -->
-        <rect x="4" y="10" width="24" height="4.5" rx="1" fill="#090404" stroke="#f3d299" stroke-width="1.5"/>
-        <!-- Cinta vertical roja -->
-        <rect x="14.2" y="10" width="3.6" height="18" fill="#c81422"/>
-        <!-- Lazo superior dorado -->
-        <path d="M16 10 C12 4, 7 7, 11 10 Z" fill="none" stroke="#f3d299" stroke-width="1.5"/>
-        <path d="M16 10 C20 4, 25 7, 21 10 Z" fill="none" stroke="#f3d299" stroke-width="1.5"/>
-      </symbol>
-    </defs>
-  </svg>
+  <!-- ================= PANTALLA DE LOGIN ================= -->
+  <div class="login-wrapper" id="loginScreen">
+    <div class="login-box">
+      <h2>Acceso VIP</h2>
+      <p>MIS XV • CRISTEL VILLEGAS</p>
 
-  <div class="invitation-card">
-    <div class="inner-border"></div>
-    <div class="satin-drape"></div>
-    <div class="feather-glow"></div>
-
-    <!-- Copa Mocktail Superior Izquierda (SVG) -->
-    <svg class="martini-top-left" viewBox="0 0 120 160" fill="none">
-      <path d="M5 10 L105 10 L55 75 Z" stroke="rgba(230,213,184,0.45)" stroke-width="1.2" fill="rgba(165, 12, 24, 0.35)"/>
-      <line x1="55" y1="75" x2="55" y2="145" stroke="rgba(230,213,184,0.5)" stroke-width="1.5"/>
-      <ellipse cx="55" cy="145" rx="28" ry="6" stroke="rgba(230,213,184,0.45)" stroke-width="1.2"/>
-      <path d="M55 24 L57 31 L64 33 L57 35 L55 42 L53 35 L46 33 L53 31 Z" fill="#f3d299"/>
-      <circle cx="40" cy="24" r="1.5" fill="#f3d299"/>
-      <circle cx="70" cy="26" r="1.5" fill="#f3d299"/>
-    </svg>
-
-    <!-- Corona / Tiara Dorada Superior Derecha (SVG) -->
-    <svg class="crown-ornament" width="75" height="65" viewBox="0 0 80 65" fill="none">
-      <path d="M12 50 L8 22 L26 35 L40 12 L54 35 L72 22 L68 50 Z" stroke="#f3d299" stroke-width="1.8" fill="rgba(212, 175, 115, 0.15)"/>
-      <line x1="12" y1="55" x2="68" y2="55" stroke="#d4af73" stroke-width="2"/>
-      <circle cx="8" cy="19" r="2.5" fill="#f3d299"/>
-      <circle cx="40" cy="9" r="3" fill="#c81422" stroke="#f3d299" stroke-width="1"/>
-      <circle cx="72" cy="19" r="2.5" fill="#f3d299"/>
-      <circle cx="40" cy="38" r="2.5" fill="#c81422"/>
-    </svg>
-
-    <!-- Abanico superior de 5 cartas (con el 15 al centro) -->
-    <div class="top-cards">
-      <div class="mini-card">Q<span class="suit">♥</span></div>
-      <div class="mini-card">K<span class="suit">♥</span></div>
-      <div class="mini-card" style="color: #f3d299; border-color: #f3d299;">15<span class="suit" style="color: #c81422;">♥</span></div>
-      <div class="mini-card">A<span class="suit">♥</span></div>
-      <div class="mini-card">J<span class="suit">♥</span></div>
-    </div>
-
-    <div class="are-you-in">¿ESTÁN LISTOS?</div>
-    <div class="tiny-heart">♥</div>
-
-    <!-- Título Principal -->
-    <h1 class="xv-title">MIS XV</h1>
-    <div class="vibes-neon">Vegas Night</div>
-    <div class="quince-subtitle">FIESTA DE QUINCEAÑERA</div>
-
-    <p class="celebrate-text">
-      ACOMPÁÑANOS A CELEBRAR<br>
-      LA NOCHE MÁGICA DE
-    </p>
-
-    <!-- Nombre de la Quinceañera con corazones -->
-    <div class="name-row">
-      <span class="outline-heart">♡</span>
-      <span class="quinceanera-name">Cristel Villegas</span>
-      <span class="outline-heart">♡</span>
-    </div>
-
-    <!-- Texto lateral izquierdo (No olvides llevar regalo + cajita de regalo) -->
-    <div class="side-cheers">
-      <span class="script-gold">No olvides</span>
-      <span class="sub">LLEVAR<br>REGALO</span>
-      <svg width="24" height="24" style="margin-top: 4px;"><use href="#gift-box"/></svg>
-    </div>
-
-    <!-- Carta lateral derecha -->
-    <div class="lucky-card">
-      <span class="script-gold">se venderá</span>
-      <span class="sub">BEBIDAS ADENTRO</span>
-    </div>
-
-    <!-- Cuadrícula de detalles del evento -->
-    <div class="details-grid">
-      <!-- Columna 1: Fecha -->
-      <div class="detail-col">
-        <div class="detail-icon">
-          <svg width="28" height="26" viewBox="0 0 32 30" fill="none">
-            <rect x="2" y="5" width="14" height="20" rx="2" transform="rotate(-12 2 5)" stroke="#d4af73" stroke-width="1.2"/>
-            <rect x="13" y="4" width="14" height="20" rx="2" transform="rotate(8 13 4)" fill="#050202" stroke="#d4af73" stroke-width="1.2"/>
-            <text x="17" y="18" fill="#c81422" font-size="9">♥</text>
-          </svg>
-        </div>
-        <div class="detail-label">FECHA</div>
-        <div class="detail-value">4 DE DICIEMBRE, 2026</div>
-        <div class="detail-sub">VIERNES</div>
-      </div>
-
-      <!-- Columna 2: Hora -->
-      <div class="detail-col">
-        <div class="detail-icon">
-          <svg width="32" height="26" viewBox="0 0 36 28" fill="none">
-            <rect x="3" y="6" width="13" height="13" rx="2" transform="rotate(-10 3 6)" stroke="#d4af73" stroke-width="1.2"/>
-            <circle cx="7" cy="10" r="1" fill="#d4af73"/>
-            <circle cx="12" cy="14" r="1" fill="#d4af73"/>
-            <rect x="18" y="8" width="13" height="13" rx="2" transform="rotate(12 18 8)" stroke="#d4af73" stroke-width="1.2"/>
-            <circle cx="22" cy="12" r="1" fill="#d4af73"/>
-            <circle cx="25" cy="15" r="1" fill="#d4af73"/>
-            <circle cx="28" cy="18" r="1" fill="#d4af73"/>
-          </svg>
-        </div>
-        <div class="detail-label">HORA</div>
-        <div class="detail-value">10:00 PM</div>
-        <div class="detail-sub">ETIQUETA SPORT-ELEGANTE</div>
-      </div>
-
-      <!-- Columna 3: Ubicación con botón a Google Maps -->
-      <div class="detail-col">
-        <div class="detail-icon">
-          <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
-            <path d="M5 5 L23 5 L14 15 Z" stroke="#d4af73" stroke-width="1.2"/>
-            <path d="M8 8 L20 8 L14 14 Z" fill="#c81422"/>
-            <line x1="14" y1="15" x2="14" y2="24" stroke="#d4af73" stroke-width="1.2"/>
-            <line x1="9" y1="24" x2="19" y2="24" stroke="#d4af73" stroke-width="1.2"/>
-          </svg>
-        </div>
-        <div class="detail-label">LUGAR</div>
-        <div class="detail-value">PARQUE ACUÁTICO</div>
-        <a 
-          href="https://www.google.com/maps/search/?api=1&query=Parque+Acuático+de+Mollendo" 
-          target="_blank" 
-          class="location-btn"
+      <form id="loginForm">
+        <input 
+          type="email" 
+          id="adminEmail" 
+          class="login-input" 
+          placeholder="Correo de administrador" 
+          required
         >
-          VER UBICACIÓN
-        </a>
-      </div>
-    </div>
 
-    <!-- Frase inferior -->
-    <div class="quote-section">
-      <div class="quote-top">UNA NOCHE DE LOCURA, BRILLO Y GLAMOUR</div>
-      <div class="quote-script">Que comience el juego</div>
-    </div>
-
-    <!-- Dress Code con cuadraditos horizontales -->
-    <div class="dress-code-row">
-      <span class="dress-code-text">DRESS CODE:</span>
-      <div class="color-swatches">
-        <div class="swatch burgundy" title="Vino"></div>
-        <div class="swatch red" title="Rojo"></div>
-        <div class="swatch black" title="Negro"></div>
-      </div>
-    </div>
-
-    <!-- RSVP con cronómetro, flechita y Botón al cuestionario -->
-    <div class="rsvp-section">
-      <div class="rsvp-bottom">NO FALTES A ESTA GRAN NOCHE</div>
-
-      <!-- CRONÓMETRO -->
-      <div class="countdown-wrapper" id="countdown">
-        <div class="countdown-box">
-          <span id="days">00</span>
-          <span class="label">DÍAS</span>
-        </div>
-        <div class="countdown-sep">:</div>
-        <div class="countdown-box">
-          <span id="hours">00</span>
-          <span class="label">HRS</span>
-        </div>
-        <div class="countdown-sep">:</div>
-        <div class="countdown-box">
-          <span id="minutes">00</span>
-          <span class="label">MIN</span>
-        </div>
-        <div class="countdown-sep">:</div>
-        <div class="countdown-box">
-          <span id="seconds">00</span>
-          <span class="label">SEG</span>
-        </div>
-      </div>
-
-      <div class="down-arrow">
-        <svg width="18" height="16" viewBox="0 0 24 20" fill="none">
-          <path d="M4 4 L12 12 L20 4" stroke="#f3d299" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M7 10 L12 15 L17 10" stroke="#ff3b49" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        </svg>
-      </div>
-      <button class="open-rsvp-btn" id="btnAbrir">CONFIRMAR ASISTENCIA</button>
-    </div>
-
-    <!-- Decoración inferior (Fichas y cartas) -->
-    <div class="chip-xv"></div>
-    <div class="chip-bottom-right">♛</div>
-
-    <div class="bottom-cards">
-      <div class="bottom-card">A<br>♦</div>
-      <div class="bottom-card">K<br>♦</div>
-      <div class="bottom-card">Q<br>♦</div>
-      <div class="bottom-card">15<br>♦</div>
-      <div class="bottom-card">10<br>♦</div>
-    </div>
-  </div>
-
-  <!-- Ventana Emergente (Cuestionario) -->
-  <div class="modal-overlay" id="rsvpModal">
-    <div class="modal-box">
-      <button class="modal-close" id="btnCerrar">&times;</button>
-      <div class="modal-title">Registro VIP</div>
-      <div class="modal-sub">MIS XV • CRISTEL VILLEGAS</div>
-
-      <form id="rsvpForm">
-        <div class="form-group">
-          <label for="nombreCompleto">NOMBRE COMPLETO</label>
-          <input type="text" id="nombreCompleto" placeholder="Escribe tu nombre y apellido" required>
+        <div class="password-wrap">
+          <input 
+            type="password" 
+            id="adminPassword" 
+            class="login-input" 
+            placeholder="Contraseña" 
+            required
+          >
+          <button type="button" class="toggle-pass" id="togglePass" aria-label="Mostrar contraseña">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
         </div>
 
-        <div class="form-group">
-          <label>¿ESTUDIAS EN EL COLEGIO?</label>
-          <div class="radio-options">
-            <label class="radio-card">
-              <input type="radio" name="tipoInvitado" value="colegio" checked>
-              <span>Colegio</span>
-            </label>
-            <label class="radio-card">
-              <input type="radio" name="tipoInvitado" value="no_colegio">
-              <span>No estoy en el colegio</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="form-group" id="grupoNombreColegio">
-          <label for="nombreColegio">NOMBRE DE TU COLEGIO</label>
-          <input type="text" id="nombreColegio" placeholder="Escribe el nombre de tu colegio" required>
-        </div>
-
-        <button type="submit" class="submit-btn">ENVIAR CONFIRMACIÓN</button>
-        <p class="modal-note">
-          ✦ Importante: Ingresa tu nombre y apellido reales, ya que se verificará en la lista de acceso en puerta para permitir tu ingreso.
-        </p>
+        <button type="submit" class="btn-login" id="btnLogin">INGRESAR AL PANEL</button>
       </form>
 
-      <div class="success-msg" id="successMsg"></div>
+      <div class="login-error" id="loginError">
+        Correo o contraseña incorrectos.
+      </div>
     </div>
   </div>
 
-  <!-- Librería oficial de Supabase + Script principal -->
+  <!-- ================= PANEL DE INVITADOS ================= -->
+  <div class="container" id="panelScreen">
+    <div class="top-bar">
+      <button class="btn-logout" id="btnLogout">CERRAR SESIÓN</button>
+    </div>
+
+    <h1>Lista de Invitados VIP</h1>
+    <div class="subtitle">MIS XV • CRISTEL VILLEGAS</div>
+
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-num" id="totalRegistrados">0</div>
+        <div class="stat-label">REGISTRADOS</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="totalAsistieron">0</div>
+        <div class="stat-label">INGRESARON</div>
+      </div>
+    </div>
+
+    <input 
+      type="text" 
+      id="buscador" 
+      class="search-box" 
+      placeholder="Buscar por nombre o colegio..."
+    >
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>NOMBRE COMPLETO</th>
+            <th>PROCEDENCIA / COLEGIO</th>
+            <th>CONTROL EN PUERTA</th>
+            <th>ACCIÓN</th>
+          </tr>
+        </thead>
+        <tbody id="tablaInvitados">
+          <tr>
+            <td colspan="4" style="text-align:center;">Cargando lista...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js"></script>
+  <script src="lista.js"></script>
 </body>
 </html>
