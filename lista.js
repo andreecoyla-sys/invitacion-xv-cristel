@@ -9,6 +9,15 @@ const loginError = document.getElementById('loginError');
 const togglePass = document.getElementById('togglePass');
 const adminPassword = document.getElementById('adminPassword');
 
+// Elementos del modal agregar invitado
+const modalAgregar = document.getElementById('modalAgregar');
+const btnAbrirAgregar = document.getElementById('btnAbrirAgregar');
+const btnCerrarAgregar = document.getElementById('btnCerrarAgregar');
+const formAgregarInvitado = document.getElementById('formAgregarInvitado');
+const radiosNuevoTipo = document.querySelectorAll('input[name="nuevoTipo"]');
+const grupoNuevoColegio = document.getElementById('grupoNuevoColegio');
+const inputNuevoColegio = document.getElementById('nuevoColegio');
+
 const SVG_EYE_OPEN = `
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
@@ -30,7 +39,78 @@ togglePass.addEventListener('click', () => {
   togglePass.innerHTML = esOculta ? SVG_EYE_CLOSED : SVG_EYE_OPEN;
 });
 
-// Verificar si ya hay una sesión activa al abrir la página
+// ================= MODAL AGREGAR INVITADO =================
+btnAbrirAgregar.addEventListener('click', () => {
+  formAgregarInvitado.reset();
+  grupoNuevoColegio.style.display = 'block';
+  inputNuevoColegio.required = true;
+  modalAgregar.classList.add('active');
+});
+
+btnCerrarAgregar.addEventListener('click', () => {
+  modalAgregar.classList.remove('active');
+});
+
+modalAgregar.addEventListener('click', (e) => {
+  if (e.target === modalAgregar) {
+    modalAgregar.classList.remove('active');
+  }
+});
+
+radiosNuevoTipo.forEach(radio => {
+  radio.addEventListener('change', () => {
+    if (radio.value === 'colegio' && radio.checked) {
+      grupoNuevoColegio.style.display = 'block';
+      inputNuevoColegio.required = true;
+    } else if (radio.value === 'no_colegio' && radio.checked) {
+      grupoNuevoColegio.style.display = 'none';
+      inputNuevoColegio.required = false;
+      inputNuevoColegio.value = '';
+    }
+  });
+});
+
+formAgregarInvitado.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const nombre = document.getElementById('nuevoNombre').value.trim();
+  const tipo = document.querySelector('input[name="nuevoTipo"]:checked').value;
+  const colegioFinal = tipo === 'colegio' ? inputNuevoColegio.value.trim() : 'No estoy en el colegio';
+
+  const btnGuardar = document.getElementById('btnGuardarInvitado');
+  btnGuardar.disabled = true;
+  btnGuardar.textContent = 'GUARDANDO...';
+
+  const { data, error } = await db
+    .from('invitados')
+    .insert([{
+      nombre_completo: nombre,
+      colegio: colegioFinal,
+      codigo_vip: 'N/A',
+      asistio: false
+    }])
+    .select();
+
+  btnGuardar.disabled = false;
+  btnGuardar.textContent = 'GUARDAR EN LISTA';
+
+  if (error) {
+    alert('Error al guardar el invitado en Supabase.');
+    console.error(error);
+    return;
+  }
+
+  if (data && data.length > 0) {
+    listaGlobal.unshift(data[0]);
+    actualizarContadores();
+    filtrar();
+  } else {
+    cargarInvitados();
+  }
+
+  modalAgregar.classList.remove('active');
+});
+
+// ================= SESIÓN Y LISTA =================
 async function verificarSesion() {
   const { data: { session } } = await db.auth.getSession();
   if (session) {
@@ -47,7 +127,6 @@ function mostrarPanel() {
   cargarInvitados();
 }
 
-// Iniciar sesión con Supabase Auth
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
   loginError.style.display = 'none';
@@ -71,7 +150,6 @@ loginForm.addEventListener('submit', async (e) => {
   mostrarPanel();
 });
 
-// Cerrar sesión
 document.getElementById('btnLogout').addEventListener('click', async () => {
   await db.auth.signOut();
   listaGlobal = [];

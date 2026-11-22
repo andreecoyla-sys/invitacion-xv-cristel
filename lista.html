@@ -6,7 +6,7 @@
   <title>Lista VIP - Mis XV Cristel Villegas</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="lista.css">
 </head>
 <body>
@@ -54,6 +54,7 @@
   <!-- ================= PANEL DE INVITADOS ================= -->
   <div class="container" id="panelScreen">
     <div class="top-bar">
+      <button class="btn-agregar" id="btnAbrirAgregar">+ AGREGAR INVITADO</button>
       <button class="btn-logout" id="btnLogout">CERRAR SESIÓN</button>
     </div>
 
@@ -94,6 +95,43 @@
           </tr>
         </tbody>
       </table>
+    </div>
+  </div>
+
+  <!-- ================= MODAL PARA AGREGAR INVITADO MANUALMENTE ================= -->
+  <div class="modal-overlay" id="modalAgregar">
+    <div class="modal-box">
+      <button class="modal-close" id="btnCerrarAgregar">&times;</button>
+      <div class="modal-title">Agregar Invitado</div>
+      <div class="modal-sub">REGISTRO MANUAL • PANEL VIP</div>
+
+      <form id="formAgregarInvitado">
+        <div class="form-group">
+          <label for="nuevoNombre">NOMBRE COMPLETO</label>
+          <input type="text" id="nuevoNombre" placeholder="Escribe nombre y apellido" required>
+        </div>
+
+        <div class="form-group">
+          <label>¿ESTUDIA EN EL COLEGIO?</label>
+          <div class="radio-options">
+            <label class="radio-card">
+              <input type="radio" name="nuevoTipo" value="colegio" checked>
+              <span>Colegio</span>
+            </label>
+            <label class="radio-card">
+              <input type="radio" name="nuevoTipo" value="no_colegio">
+              <span>No está en el colegio</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" id="grupoNuevoColegio">
+          <label for="nuevoColegio">NOMBRE DEL COLEGIO</label>
+          <input type="text" id="nuevoColegio" placeholder="Escribe el nombre del colegio" required>
+        </div>
+
+        <button type="submit" class="btn-login" id="btnGuardarInvitado">GUARDAR EN LISTA</button>
+      </form>
     </div>
   </div>
 
