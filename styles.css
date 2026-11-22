@@ -42,6 +42,11 @@ body {
   50% { transform: rotate(10deg) translateY(-5px); }
 }
 
+@keyframes pointRight {
+  0%, 100% { transform: translateX(0px) rotate(6deg); }
+  50% { transform: translateX(5px) rotate(6deg); }
+}
+
 @keyframes neonPulse {
   0%, 100% {
     color: #ff6b76;
@@ -293,6 +298,17 @@ body {
   line-height: 1.4;
   display: block;
   margin-top: 4px;
+}
+
+/* Flecha animada señalando el Dress Code */
+.dress-code-arrow {
+  position: absolute;
+  right: 104px;
+  top: 215px;
+  z-index: 6;
+  pointer-events: none;
+  filter: drop-shadow(0 0 6px rgba(255, 59, 73, 0.65));
+  animation: pointRight 1.4s ease-in-out infinite;
 }
 
 /* Carta inclinada lateral derecha con Dress Code */
@@ -862,6 +878,16 @@ body {
   .side-cheers .sub {
     font-size: 7px;
     letter-spacing: 1px;
+  }
+
+  .dress-code-arrow {
+    right: 76px;
+    top: 186px;
+  }
+
+  .dress-code-arrow svg {
+    width: 34px;
+    height: 24px;
   }
 
   .lucky-card {
