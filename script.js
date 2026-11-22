@@ -91,8 +91,8 @@ formulario.addEventListener('submit', async (evento) => {
   inputColegio.required = true;
 });
 
-// 2. Cronómetro hasta el viernes 4 de diciembre de 2026 a las 10:00 PM
-const fechaEvento = new Date('2026-12-04T22:00:00').getTime();
+// 2. Cronómetro hasta el viernes 4 de diciembre de 2026 a las 9:00 PM
+const fechaEvento = new Date('2026-12-04T21:00:00').getTime();
 
 function actualizarCronometro() {
   const ahora = new Date().getTime();
