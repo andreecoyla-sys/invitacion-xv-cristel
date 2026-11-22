@@ -13,8 +13,51 @@ const radiosTipo = document.querySelectorAll('input[name="tipoInvitado"]');
 const grupoColegio = document.getElementById('grupoNombreColegio');
 const inputColegio = document.getElementById('nombreColegio');
 
+function escapeHTML(str) {
+  return String(str).replace(/[&<>"']/g, m => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[m]));
+}
+
+// ================= CRONÓMETRO (4 DE DICIEMBRE 2026 - 9:00 PM HORA PERÚ) =================
+const fechaEvento = new Date('2026-12-04T21:00:00-05:00').getTime();
+
+function actualizarCronometro() {
+  const ahora = Date.now();
+  const diferencia = fechaEvento - ahora;
+
+  const elDays = document.getElementById('days');
+  const elHours = document.getElementById('hours');
+  const elMinutes = document.getElementById('minutes');
+  const elSeconds = document.getElementById('seconds');
+
+  if (!elDays || !elHours || !elMinutes || !elSeconds) return;
+
+  if (diferencia <= 0) {
+    elDays.textContent = '00';
+    elHours.textContent = '00';
+    elMinutes.textContent = '00';
+    elSeconds.textContent = '00';
+    return;
+  }
+
+  const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
+  const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
+  const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
+
+  elDays.textContent = String(dias).padStart(2, '0');
+  elHours.textContent = String(horas).padStart(2, '0');
+  elMinutes.textContent = String(minutos).padStart(2, '0');
+  elSeconds.textContent = String(segundos).padStart(2, '0');
+}
+
+actualizarCronometro();
+setInterval(actualizarCronometro, 1000);
+
 // Abrir y cerrar modal
 btnAbrir.addEventListener('click', () => {
+  mensajeBox.style.display = 'none';
   modal.classList.add('active');
 });
 
@@ -70,7 +113,7 @@ formulario.addEventListener('submit', async (evento) => {
       btnSubmit.disabled = false;
       btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
       mensajeBox.style.display = 'block';
-      mensajeBox.innerHTML = 'Hubo un problema al registrar. Intenta nuevamente.';
+      mensajeBox.textContent = 'Hubo un problema al registrar. Intenta nuevamente.';
       console.error('Error Supabase:', error);
       return;
     }
@@ -81,8 +124,8 @@ formulario.addEventListener('submit', async (evento) => {
 
   mensajeBox.style.display = 'block';
   mensajeBox.innerHTML = `
-    ¡Gracias, <strong>${nombre}</strong>!<br>
-    Procedencia: <strong>${colegioFinal}</strong><br>
+    ¡Gracias, <strong>${escapeHTML(nombre)}</strong>!<br>
+    Procedencia: <strong>${escapeHTML(colegioFinal)}</strong><br>
     <span style="color:#fff;">¡Tu asistencia ha sido confirmada!</span>
   `;
 

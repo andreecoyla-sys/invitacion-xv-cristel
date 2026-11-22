@@ -638,9 +638,11 @@ body {
   background: #080303;
   border: 1.5px solid #d4af73;
   box-shadow: 0 0 35px rgba(184, 13, 25, 0.6);
-  padding: 28px 26px;
+  padding: 26px 24px;
   color: #e6d5b8;
   text-align: center;
+  max-height: 92vh;
+  overflow-y: auto;
 }
 
 .modal-close {
@@ -667,12 +669,12 @@ body {
   letter-spacing: 2px;
   color: #f3d299;
   margin-top: 6px;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .form-group {
   text-align: left;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .form-group label {
@@ -738,10 +740,69 @@ body {
   box-shadow: 0 0 10px rgba(255, 59, 73, 0.35);
 }
 
+/* ================= CRONÓMETRO DENTRO DEL MODAL ================= */
+.modal-countdown-block {
+  margin: 14px 0 14px 0;
+  padding: 10px 8px;
+  background: rgba(18, 9, 9, 0.9);
+  border: 1px solid rgba(212, 175, 115, 0.45);
+  border-radius: 3px;
+}
+
+.modal-countdown-label {
+  font-size: 8.5px;
+  letter-spacing: 1.8px;
+  color: #d4af73;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.countdown-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.countdown-box {
+  background: #0a0404;
+  border: 1px solid rgba(212, 175, 115, 0.5);
+  border-radius: 3px;
+  padding: 5px 8px;
+  min-width: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 0 8px rgba(184, 13, 25, 0.3);
+}
+
+.countdown-box span:first-child {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: #ff3b49;
+  line-height: 1.1;
+  text-shadow: 0 0 6px rgba(255, 59, 73, 0.6);
+}
+
+.countdown-box .label {
+  font-size: 6.5px;
+  letter-spacing: 1.2px;
+  color: #f3d299;
+  margin-top: 2px;
+}
+
+.countdown-sep {
+  font-size: 14px;
+  font-weight: 700;
+  color: #d4af73;
+  margin-top: -10px;
+}
+
 .submit-btn {
   width: 100%;
   padding: 11px;
-  margin-top: 6px;
+  margin-top: 4px;
   background: linear-gradient(135deg, #b80d19 0%, #6b040c 100%);
   border: 1px solid #f3d299;
   color: #f3d299;
@@ -945,5 +1006,14 @@ body {
   .martini-top-left {
     top: 8px;
     left: 8px;
+  }
+
+  .countdown-box {
+    min-width: 46px;
+    padding: 4px 6px;
+  }
+
+  .countdown-box span:first-child {
+    font-size: 14px;
   }
 }

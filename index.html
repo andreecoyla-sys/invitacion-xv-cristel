@@ -15,13 +15,9 @@
   <svg width="0" height="0" style="position:absolute;">
     <defs>
       <symbol id="gift-box" viewBox="0 0 32 32">
-        <!-- Caja -->
         <rect x="6" y="14" width="20" height="14" rx="1.5" fill="#140707" stroke="#d4af73" stroke-width="1.6"/>
-        <!-- Tapa -->
         <rect x="4" y="10" width="24" height="4.5" rx="1" fill="#090404" stroke="#f3d299" stroke-width="1.5"/>
-        <!-- Cinta vertical roja -->
         <rect x="14.2" y="10" width="3.6" height="18" fill="#c81422"/>
-        <!-- Lazo superior dorado -->
         <path d="M16 10 C12 4, 7 7, 11 10 Z" fill="none" stroke="#f3d299" stroke-width="1.5"/>
         <path d="M16 10 C20 4, 25 7, 21 10 Z" fill="none" stroke="#f3d299" stroke-width="1.5"/>
       </symbol>
@@ -89,7 +85,7 @@
       <svg width="24" height="24" style="margin-top: 4px;"><use href="#gift-box"/></svg>
     </div>
 
-    <!-- Flecha grande ocupando el espacio vacío y apuntando directo al Dress Code -->
+    <!-- Flecha grande apuntando directo al Dress Code -->
     <div class="dress-code-arrow" aria-hidden="true">
       <svg width="85" height="125" viewBox="0 0 95 140" fill="none">
         <path d="M72 8 C92 48, 84 96, 46 126" stroke="#f3d299" stroke-width="2.6" stroke-linecap="round" stroke-dasharray="5 3"/>
@@ -226,6 +222,32 @@
         <div class="form-group" id="grupoNombreColegio">
           <label for="nombreColegio">NOMBRE DE TU COLEGIO</label>
           <input type="text" id="nombreColegio" placeholder="Escribe el nombre de tu colegio" required>
+        </div>
+
+        <!-- CRONÓMETRO DE CUENTA REGRESIVA (Debajo de Colegio / No estoy en el colegio) -->
+        <div class="modal-countdown-block">
+          <div class="modal-countdown-label">FALTAN PARA LA GRAN NOCHE</div>
+          <div class="countdown-wrapper" id="countdown">
+            <div class="countdown-box">
+              <span id="days">00</span>
+              <span class="label">DÍAS</span>
+            </div>
+            <div class="countdown-sep">:</div>
+            <div class="countdown-box">
+              <span id="hours">00</span>
+              <span class="label">HRS</span>
+            </div>
+            <div class="countdown-sep">:</div>
+            <div class="countdown-box">
+              <span id="minutes">00</span>
+              <span class="label">MIN</span>
+            </div>
+            <div class="countdown-sep">:</div>
+            <div class="countdown-box">
+              <span id="seconds">00</span>
+              <span class="label">SEG</span>
+            </div>
+          </div>
         </div>
 
         <button type="submit" class="submit-btn">ENVIAR CONFIRMACIÓN</button>
