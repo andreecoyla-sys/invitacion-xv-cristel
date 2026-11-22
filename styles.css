@@ -44,7 +44,7 @@ body {
 
 @keyframes pointLeft {
   0%, 100% { transform: translate(0px, 0px); }
-  50% { transform: translate(-5px, 4px); }
+  50% { transform: translate(-4px, 5px); }
 }
 
 @keyframes neonPulse {
@@ -300,11 +300,11 @@ body {
   margin-top: 4px;
 }
 
-/* Flecha grande señalando desde arriba a la derecha hacia el Dress Code */
+/* Flecha grande señalando directo al borde superior de la carta Dress Code */
 .dress-code-arrow {
   position: absolute;
-  right: 22px;
-  top: 138px;
+  right: 26px;
+  top: 122px;
   z-index: 7;
   pointer-events: none;
   filter: drop-shadow(0 0 8px rgba(255, 59, 73, 0.75));
@@ -835,12 +835,12 @@ body {
 
   .dress-code-arrow {
     right: 14px;
-    top: 118px;
+    top: 106px;
   }
 
   .dress-code-arrow svg {
-    width: 74px;
-    height: 70px;
+    width: 66px;
+    height: 102px;
   }
 
   .lucky-card {
