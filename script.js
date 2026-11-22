@@ -90,32 +90,3 @@ formulario.addEventListener('submit', async (evento) => {
   grupoColegio.style.display = 'block';
   inputColegio.required = true;
 });
-
-// 2. Cronómetro hasta el viernes 4 de diciembre de 2026 a las 9:00 PM
-const fechaEvento = new Date('2026-12-04T21:00:00').getTime();
-
-function actualizarCronometro() {
-  const ahora = new Date().getTime();
-  const diferencia = fechaEvento - ahora;
-
-  const contenedor = document.getElementById('countdown');
-  if (!contenedor) return;
-
-  if (diferencia <= 0) {
-    contenedor.innerHTML = "<span style='color:#f3d299; font-size:10px; letter-spacing:2px; font-weight:700;'>¡ES HOY! QUE COMIENCE EL JUEGO</span>";
-    return;
-  }
-
-  const dias = Math.floor(diferencia / (1000 * 60 * 60 * 24));
-  const horas = Math.floor((diferencia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutos = Math.floor((diferencia % (1000 * 60 * 60)) / (1000 * 60));
-  const segundos = Math.floor((diferencia % (1000 * 60)) / 1000);
-
-  document.getElementById('days').textContent = String(dias).padStart(2, '0');
-  document.getElementById('hours').textContent = String(horas).padStart(2, '0');
-  document.getElementById('minutes').textContent = String(minutos).padStart(2, '0');
-  document.getElementById('seconds').textContent = String(segundos).padStart(2, '0');
-}
-
-actualizarCronometro();
-setInterval(actualizarCronometro, 1000);
