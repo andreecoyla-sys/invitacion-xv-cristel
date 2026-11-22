@@ -82,11 +82,11 @@ body {
   50% { transform: translateY(4px); }
 }
 
-/* Contenedor principal de la invitación (proporción 5x7) */
+/* Contenedor principal de la invitación */
 .invitation-card {
   position: relative;
   width: 500px;
-  height: 700px;
+  height: 755px;
   background-color: #050202;
   background-image: 
     radial-gradient(circle at 12% 15%, rgba(168, 12, 24, 0.45) 0%, transparent 35%),
@@ -295,7 +295,7 @@ body {
   margin-top: 4px;
 }
 
-/* Carta inclinada "reina DE LA NOCHE" con balanceo suave */
+/* Carta inclinada lateral derecha */
 .lucky-card {
   position: absolute;
   right: 26px;
@@ -460,7 +460,7 @@ body {
 .swatch.red { background-color: #8f0306; }
 .swatch.black { background-color: #050404; }
 
-/* RSVP Footer con flechita */
+/* RSVP Footer con cronómetro y flechita */
 .rsvp-section {
   margin-top: 8px;
   text-align: center;
@@ -476,8 +476,55 @@ body {
   color: #e6d5b8;
 }
 
+/* ================= ESTILOS DEL CRONÓMETRO ================= */
+.countdown-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin: 8px 0 4px 0;
+  z-index: 12;
+}
+
+.countdown-box {
+  background: linear-gradient(180deg, rgba(30, 5, 5, 0.92) 0%, rgba(10, 2, 2, 0.96) 100%);
+  border: 1px solid #d4af73;
+  border-radius: 4px;
+  padding: 4px 8px;
+  min-width: 44px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.75), inset 0 0 6px rgba(212, 175, 115, 0.15);
+}
+
+.countdown-box span:first-child {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #f3d299;
+  line-height: 1.1;
+  text-shadow: 0 0 6px rgba(243, 210, 153, 0.45);
+}
+
+.countdown-box .label {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 6.5px;
+  letter-spacing: 1px;
+  color: #d4af73;
+  margin-top: 2px;
+}
+
+.countdown-sep {
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: #d4af73;
+  padding-bottom: 8px;
+}
+
 .down-arrow {
-  margin: 4px 0 3px 0;
+  margin: 2px 0 3px 0;
   line-height: 1;
   animation: bounceArrow 1.3s infinite ease-in-out;
 }
@@ -786,8 +833,8 @@ body {
     width: 100%;
     max-width: 500px;
     height: auto;
-    min-height: 640px;
-    padding: 18px 14px 26px 14px;
+    min-height: 680px;
+    padding: 18px 14px 28px 14px;
   }
 
   .inner-border {
@@ -882,6 +929,15 @@ body {
   .dress-code-text {
     font-size: 8.5px;
     letter-spacing: 1.5px;
+  }
+
+  .countdown-box {
+    min-width: 38px;
+    padding: 3px 6px;
+  }
+
+  .countdown-box span:first-child {
+    font-size: 12px;
   }
 
   .chip-xv {
