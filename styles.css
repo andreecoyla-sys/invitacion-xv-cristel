@@ -86,7 +86,7 @@ body {
 .invitation-card {
   position: relative;
   width: 500px;
-  height: 755px;
+  height: 725px;
   background-color: #050202;
   background-image: 
     radial-gradient(circle at 12% 15%, rgba(168, 12, 24, 0.45) 0%, transparent 35%),
@@ -295,15 +295,15 @@ body {
   margin-top: 4px;
 }
 
-/* Carta inclinada lateral derecha */
+/* Carta inclinada lateral derecha con Dress Code */
 .lucky-card {
   position: absolute;
   right: 26px;
   top: 240px;
-  width: 80px;
-  height: 108px;
-  background: rgba(8, 5, 5, 0.9);
-  border: 1px solid rgba(212, 175, 115, 0.4);
+  width: 82px;
+  height: 110px;
+  background: rgba(8, 5, 5, 0.92);
+  border: 1px solid rgba(212, 175, 115, 0.45);
   border-radius: 4px;
   display: flex;
   flex-direction: column;
@@ -311,8 +311,9 @@ body {
   align-items: center;
   text-align: center;
   z-index: 5;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.8);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.85);
   animation: cardTilt 4.2s ease-in-out infinite;
+  padding: 4px;
 }
 
 .lucky-card .script-gold {
@@ -320,21 +321,42 @@ body {
   font-size: 26px;
   color: #f3d299;
   text-shadow: 0 0 8px rgba(243, 210, 153, 0.7);
-  line-height: 1;
+  line-height: 0.95;
 }
 
 .lucky-card .sub {
-  font-size: 8px;
-  letter-spacing: 1.3px;
-  margin-top: 4px;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-top: 2px;
+  color: #e6d5b8;
 }
+
+.card-swatches {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+}
+
+.swatch {
+  width: 17px;
+  height: 17px;
+  border: 1.2px solid #e6d5b8;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
+}
+
+.swatch.burgundy { background-color: #5c0204; }
+.swatch.red { background-color: #8f0306; }
+.swatch.black { background-color: #050404; }
 
 /* Sección de 3 columnas (Fecha, Hora, Lugar) */
 .details-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   width: 100%;
-  margin-top: 12px;
+  margin-top: 14px;
   z-index: 5;
   text-align: center;
 }
@@ -405,7 +427,7 @@ body {
 
 /* Frase inferior ("Que comience el juego") */
 .quote-section {
-  margin-top: 12px;
+  margin-top: 14px;
   text-align: center;
   z-index: 5;
 }
@@ -425,44 +447,9 @@ body {
   line-height: 1;
 }
 
-/* Sección Dress Code horizontal */
-.dress-code-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  margin-top: 8px;
-  z-index: 5;
-}
-
-.dress-code-text {
-  font-size: 9.5px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #e6d5b8;
-}
-
-.color-swatches {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 6px;
-}
-
-.swatch {
-  width: 22px;
-  height: 22px;
-  border: 1.5px solid #e6d5b8;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
-}
-
-.swatch.burgundy { background-color: #5c0204; }
-.swatch.red { background-color: #8f0306; }
-.swatch.black { background-color: #050404; }
-
 /* RSVP Footer con cronómetro y flechita */
 .rsvp-section {
-  margin-top: 8px;
+  margin-top: 10px;
   text-align: center;
   z-index: 12;
   display: flex;
@@ -833,7 +820,7 @@ body {
     width: 100%;
     max-width: 500px;
     height: auto;
-    min-height: 680px;
+    min-height: 660px;
     padding: 18px 14px 28px 14px;
   }
 
@@ -880,8 +867,8 @@ body {
   .lucky-card {
     right: 12px;
     top: 205px;
-    width: 66px;
-    height: 92px;
+    width: 68px;
+    height: 94px;
   }
 
   .lucky-card .script-gold {
@@ -889,8 +876,18 @@ body {
   }
 
   .lucky-card .sub {
-    font-size: 6.5px;
+    font-size: 7px;
     letter-spacing: 1px;
+  }
+
+  .card-swatches {
+    gap: 3px;
+    margin-top: 6px;
+  }
+
+  .swatch {
+    width: 14px;
+    height: 14px;
   }
 
   .details-grid {
@@ -924,11 +921,6 @@ body {
 
   .quote-script {
     font-size: 31px;
-  }
-
-  .dress-code-text {
-    font-size: 8.5px;
-    letter-spacing: 1.5px;
   }
 
   .countdown-box {
