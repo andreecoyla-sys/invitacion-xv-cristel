@@ -1323,3 +1323,20 @@ body {
 .alert-close-btn:hover {
   background: linear-gradient(135deg, #db1220 0%, #8a0510 100%);
 }
+
+/* ================= BOTÓN DE ASISTENCIA DESHABILITADO (AFORO / FECHA CERRADA) ================= */
+.open-rsvp-btn:disabled {
+  background: #2b1416;
+  color: rgba(243, 210, 153, 0.45);
+  border-color: rgba(212, 175, 115, 0.35);
+  animation: none;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.open-rsvp-btn:disabled:hover {
+  background: #2b1416;
+  box-shadow: none;
+  transform: none;
+}

@@ -20,6 +20,10 @@ const alertTitle = document.getElementById('customAlertTitle');
 const alertBody = document.getElementById('customAlertBody');
 const btnCerrarAlerta = document.getElementById('btnCerrarAlerta');
 
+// Configuración de cierre automático (500 invitados o miércoles 2 de diciembre medianoche)
+const LIMITE_INVITADOS = 500;
+const FECHA_CIERRE = new Date('2026-12-02T23:59:59-05:00').getTime();
+
 function escapeHTML(str) {
   return String(str).replace(/[&<>"']/g, m => ({
     '&': '&amp;',
@@ -85,6 +89,44 @@ function actualizarCronometro() {
 actualizarCronometro();
 setInterval(actualizarCronometro, 1000);
 
+// ================= CIERRE AUTOMÁTICO DEL BOTÓN DE ASISTENCIA =================
+function deshabilitarBotonAsistencia(motivo = 'REGISTRO CERRADO') {
+  if (!btnAbrir) return;
+  btnAbrir.disabled = true;
+  btnAbrir.textContent = motivo;
+  modal.classList.remove('active');
+}
+
+async function verificarEstadoRegistro() {
+  if (Date.now() >= FECHA_CIERRE) {
+    deshabilitarBotonAsistencia('REGISTRO CERRADO');
+    return;
+  }
+
+  if (db) {
+    const { count, error } = await db
+      .from('invitados')
+      .select('*', { count: 'exact', head: true });
+
+    if (!error && count >= LIMITE_INVITADOS) {
+      deshabilitarBotonAsistencia('AFORO COMPLETO');
+      mostrarVentanaEmergente(
+        'duplicado',
+        'AFORO COMPLETO',
+        'Lamentamos informarte que hemos alcanzado el límite máximo de <strong>500 invitados registrados</strong>.<br><br>Por capacidad del evento, ya no es posible registrar más ingresos.',
+        'ENTENDIDO'
+      );
+    }
+  }
+}
+
+verificarEstadoRegistro();
+setInterval(() => {
+  if (Date.now() >= FECHA_CIERRE) {
+    deshabilitarBotonAsistencia('REGISTRO CERRADO');
+  }
+}, 10000);
+
 // Abrir y cerrar modal
 btnAbrir.addEventListener('click', () => {
   mensajeBox.style.display = 'none';
@@ -133,6 +175,37 @@ formulario.addEventListener('submit', async (evento) => {
 
   // Guardar en Supabase
   if (db) {
+    // 0. Verificar cierre por fecha o límite de 500 registrados antes de procesar
+    if (Date.now() >= FECHA_CIERRE) {
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
+      deshabilitarBotonAsistencia('REGISTRO CERRADO');
+      mostrarVentanaEmergente(
+        'duplicado',
+        'REGISTRO CERRADO',
+        'El plazo para confirmar asistencia ha finalizado.<br><br>Agradecemos mucho tu interés en acompañarnos.',
+        'ENTENDIDO'
+      );
+      return;
+    }
+
+    const { count: totalRegistrados, error: errorConteo } = await db
+      .from('invitados')
+      .select('*', { count: 'exact', head: true });
+
+    if (!errorConteo && totalRegistrados >= LIMITE_INVITADOS) {
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
+      deshabilitarBotonAsistencia('AFORO COMPLETO');
+      mostrarVentanaEmergente(
+        'duplicado',
+        'AFORO COMPLETO',
+        'Lamentamos informarte que hemos alcanzado el límite máximo de <strong>500 invitados registrados</strong>.<br><br>Por capacidad del evento, ya no es posible registrar más ingresos.',
+        'ENTENDIDO'
+      );
+      return;
+    }
+
     // 1. Verificar si el nombre ya existe en la lista
     const { data: existentes, error: errorBusqueda } = await db
       .from('invitados')
@@ -189,6 +262,11 @@ formulario.addEventListener('submit', async (evento) => {
       );
       console.error('Error Supabase:', error);
       return;
+    }
+
+    // Si con este registro se alcanzó el cupo 500, deshabilitar el botón de inmediato
+    if (!errorConteo && (totalRegistrados + 1) >= LIMITE_INVITADOS) {
+      deshabilitarBotonAsistencia('AFORO COMPLETO');
     }
   }
 
