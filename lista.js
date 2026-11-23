@@ -1,5 +1,5 @@
 const SUPABASE_URL = 'https://wvykyrjebtayldqsfltc.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_zhCD-gCE5bMkm-3RvCUQ4Q_kv7wfjtl';
+const SUPABASE_KEY = 'sb_publishable_zhCD-gCE5bMkm3RvCUQ4Q_kv7wfjtl';
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const loginScreen = document.getElementById('loginScreen');
@@ -72,11 +72,15 @@ radiosNuevoTipo.forEach(radio => {
 
 formAgregarInvitado.addEventListener('submit', async (e) => {
   e.preventDefault();
+
   const nombre = document.getElementById('nuevoNombre').value.trim();
   const tipo = document.querySelector('input[name="nuevoTipo"]:checked').value;
-  const colegioFinal = tipo === 'colegio' ? inputNuevoColegio.value.trim() : 'No estoy en el colegio';
+  const colegioFinal = tipo === 'colegio'
+    ? inputNuevoColegio.value.trim()
+    : 'No estoy en el colegio';
 
   const btnGuardar = document.getElementById('btnGuardarInvitado');
+
   btnGuardar.disabled = true;
   btnGuardar.textContent = 'GUARDANDO...';
 
@@ -85,7 +89,6 @@ formAgregarInvitado.addEventListener('submit', async (e) => {
     .insert([{
       nombre_completo: nombre,
       colegio: colegioFinal,
-      codigo_vip: 'N/A',
       asistio: false
     }])
     .select();
@@ -113,6 +116,7 @@ formAgregarInvitado.addEventListener('submit', async (e) => {
 // ================= SESIÓN Y LISTA =================
 async function verificarSesion() {
   const { data: { session } } = await db.auth.getSession();
+
   if (session) {
     mostrarPanel();
   } else {
@@ -129,8 +133,11 @@ function mostrarPanel() {
 
 loginForm.addEventListener('submit', async (e) => {
   e.preventDefault();
+
   loginError.style.display = 'none';
+
   const btnLogin = document.getElementById('btnLogin');
+
   btnLogin.disabled = true;
   btnLogin.textContent = 'VERIFICANDO...';
 
@@ -152,6 +159,7 @@ loginForm.addEventListener('submit', async (e) => {
 
 document.getElementById('btnLogout').addEventListener('click', async () => {
   await db.auth.signOut();
+
   listaGlobal = [];
   panelScreen.style.display = 'none';
   loginScreen.style.display = 'flex';
@@ -167,7 +175,8 @@ async function cargarInvitados() {
     .order('id', { ascending: false });
 
   if (error) {
-    document.getElementById('tablaInvitados').innerHTML = '<tr><td colspan="4">No autorizado o error de conexión.</td></tr>';
+    document.getElementById('tablaInvitados').innerHTML =
+      '<tr><td colspan="4">No autorizado o error de conexión.</td></tr>';
     return;
   }
 
@@ -178,19 +187,26 @@ async function cargarInvitados() {
 
 function actualizarContadores() {
   document.getElementById('totalRegistrados').textContent = listaGlobal.length;
-  document.getElementById('totalAsistieron').textContent = listaGlobal.filter(i => i.asistio).length;
+  document.getElementById('totalAsistieron').textContent =
+    listaGlobal.filter(i => i.asistio).length;
 }
 
 function escapeHTML(str) {
   return String(str).replace(/[&<>"']/g, m => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
   }[m]));
 }
 
 function renderizarTabla(datos) {
   const tbody = document.getElementById('tablaInvitados');
+
   if (datos.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No hay registros todavía.</td></tr>';
+    tbody.innerHTML =
+      '<tr><td colspan="4" style="text-align:center;">No hay registros todavía.</td></tr>';
     return;
   }
 
@@ -199,16 +215,16 @@ function renderizarTabla(datos) {
       <td><strong>${escapeHTML(inv.nombre_completo)}</strong></td>
       <td>${escapeHTML(inv.colegio)}</td>
       <td>
-        <button 
-          class="btn-check ${inv.asistio ? 'btn-asistio' : 'btn-pendiente'}" 
+        <button
+          class="btn-check ${inv.asistio ? 'btn-asistio' : 'btn-pendiente'}"
           onclick="cambiarAsistencia(${inv.id}, ${!inv.asistio})"
         >
           ${inv.asistio ? '✓ ASISTIÓ' : 'MARCAR INGRESO'}
         </button>
       </td>
       <td>
-        <button 
-          class="btn-eliminar" 
+        <button
+          class="btn-eliminar"
           onclick="eliminarInvitado(${inv.id}, '${escapeHTML(inv.nombre_completo).replace(/&#39;/g, "\\'")}')"
         >
           ELIMINAR
@@ -219,19 +235,33 @@ function renderizarTabla(datos) {
 }
 
 async function cambiarAsistencia(id, nuevoEstado) {
-  const { error } = await db.from('invitados').update({ asistio: nuevoEstado }).eq('id', id);
+  const { error } = await db
+    .from('invitados')
+    .update({ asistio: nuevoEstado })
+    .eq('id', id);
+
   if (error) return;
+
   const item = listaGlobal.find(i => i.id === id);
-  if (item) item.asistio = nuevoEstado;
+
+  if (item) {
+    item.asistio = nuevoEstado;
+  }
+
   actualizarContadores();
   filtrar();
 }
 
 async function eliminarInvitado(id, nombre) {
   const confirmar = confirm(`¿Seguro que deseas eliminar a "${nombre}" de la lista?`);
+
   if (!confirmar) return;
 
-  const { error } = await db.from('invitados').delete().eq('id', id);
+  const { error } = await db
+    .from('invitados')
+    .delete()
+    .eq('id', id);
+
   if (error) {
     alert('No se pudo eliminar el registro.');
     return;
@@ -244,12 +274,15 @@ async function eliminarInvitado(id, nombre) {
 
 function filtrar() {
   const texto = document.getElementById('buscador').value.toLowerCase();
+
   const filtrados = listaGlobal.filter(i =>
     i.nombre_completo.toLowerCase().includes(texto) ||
     i.colegio.toLowerCase().includes(texto)
   );
+
   renderizarTabla(filtrados);
 }
 
 document.getElementById('buscador').addEventListener('input', filtrar);
+
 verificarSesion();
