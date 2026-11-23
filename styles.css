@@ -33,8 +33,8 @@ body {
 }
 
 @keyframes cardTilt {
-  0%, 100% { transform: rotate(10deg) translateY(0px); }
-  50% { transform: rotate(14deg) translateY(-4px); }
+  0%, 100% { transform: rotate(5deg) translateY(0px); }
+  50% { transform: rotate(8deg) translateY(-4px); }
 }
 
 @keyframes crownFloat {
@@ -44,7 +44,7 @@ body {
 
 @keyframes pointLeft {
   0%, 100% { transform: translate(0px, 0px); }
-  50% { transform: translate(-4px, 5px); }
+  50% { transform: translate(-4px, 4px); }
 }
 
 @keyframes neonPulse {
@@ -87,7 +87,18 @@ body {
   50% { transform: translateY(4px); }
 }
 
-/* Contenedor principal de la invitación */
+@keyframes popAlert {
+  0% { opacity: 0; transform: scale(0.85); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes pulsoMusica {
+  0% { box-shadow: 0 0 0 0 rgba(212, 175, 115, 0.55); }
+  70% { box-shadow: 0 0 0 10px rgba(212, 175, 115, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(212, 175, 115, 0); }
+}
+
+/* ================= CONTENEDOR PRINCIPAL DE LA INVITACIÓN ================= */
 .invitation-card {
   position: relative;
   width: 500px;
@@ -107,7 +118,6 @@ body {
   padding: 20px 30px;
 }
 
-/* Marco rojo fino interior */
 .inner-border {
   position: absolute;
   inset: 12px;
@@ -116,7 +126,6 @@ body {
   z-index: 10;
 }
 
-/* Efecto de satén rojo en la esquina inferior izquierda */
 .satin-drape {
   position: absolute;
   bottom: -40px;
@@ -131,7 +140,6 @@ body {
   z-index: 1;
 }
 
-/* Pluma roja superior derecha */
 .feather-glow {
   position: absolute;
   top: -20px;
@@ -146,7 +154,7 @@ body {
   z-index: 1;
 }
 
-/* Abanico superior de cartas con flotación suave */
+/* Abanico superior de cartas */
 .top-cards {
   position: relative;
   display: flex;
@@ -172,7 +180,7 @@ body {
   font-size: 10px;
   font-weight: 700;
   color: #c81422;
-  box-shadow: -2px 2px 6px rgba(0,0,0,0.8);
+  box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.8);
   margin: 0 -6px;
 }
 
@@ -219,7 +227,6 @@ body {
   z-index: 5;
 }
 
-/* Subtítulo Neón Vegas Night con brillo pulsante intenso */
 .vibes-neon {
   font-family: 'Alex Brush', cursive;
   font-size: 48px;
@@ -270,11 +277,11 @@ body {
   animation: heartBeat 2.4s ease-in-out infinite;
 }
 
-/* Elementos laterales flotantes */
+/* Elemento lateral izquierdo (Regalo) */
 .side-cheers {
   position: absolute;
   left: 30px;
-  top: 255px;
+  top: 245px;
   text-align: center;
   z-index: 5;
   display: flex;
@@ -300,67 +307,68 @@ body {
   margin-top: 4px;
 }
 
-/* Flecha grande señalando directo al borde superior de la carta Dress Code */
+/* Flecha apuntando al Dress Code */
 .dress-code-arrow {
   position: absolute;
-  right: 26px;
-  top: 122px;
+  right: 16px;
+  top: 112px;
   z-index: 7;
   pointer-events: none;
   filter: drop-shadow(0 0 8px rgba(255, 59, 73, 0.75));
   animation: pointLeft 1.5s ease-in-out infinite;
 }
 
-/* Carta inclinada lateral derecha con Dress Code */
+/* Carta lateral derecha con Dress Code (subida para no tocar la copa) */
 .lucky-card {
   position: absolute;
-  right: 36px;
-  top: 240px;
-  width: 82px;
-  height: 110px;
-  background: rgba(8, 5, 5, 0.92);
-  border: 1px solid rgba(212, 175, 115, 0.45);
-  border-radius: 4px;
+  right: 20px;
+  top: 205px;
+  min-width: 106px;
+  padding: 10px 13px;
+  border: 1.8px solid #f3d299;
+  border-radius: 10px;
+  background: linear-gradient(145deg, rgba(28, 7, 10, 0.96), rgba(10, 3, 5, 0.98));
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 16px rgba(243, 210, 153, 0.3);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   text-align: center;
-  z-index: 5;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.85);
+  z-index: 15;
   animation: cardTilt 4.2s ease-in-out infinite;
-  padding: 4px;
 }
 
 .lucky-card .script-gold {
   font-family: 'Alex Brush', cursive;
-  font-size: 26px;
+  font-size: 27px;
   color: #f3d299;
-  text-shadow: 0 0 8px rgba(243, 210, 153, 0.7);
-  line-height: 0.95;
+  line-height: 1;
+  text-shadow: 0 0 10px rgba(243, 210, 153, 0.5);
 }
 
 .lucky-card .sub {
-  font-size: 8.5px;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 1.5px;
-  margin-top: 2px;
-  color: #e6d5b8;
+  letter-spacing: 2.5px;
+  color: #ffffff;
+  margin-top: 3px;
 }
 
 .card-swatches {
   display: flex;
-  justify-content: center;
   align-items: center;
-  gap: 5px;
-  margin-top: 8px;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 7px;
 }
 
 .swatch {
-  width: 17px;
-  height: 17px;
-  border: 1.2px solid #e6d5b8;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 1.5px solid #f3d299;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.65);
+  flex-shrink: 0;
 }
 
 .swatch.burgundy { background-color: #5c0204; }
@@ -372,7 +380,7 @@ body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   width: 100%;
-  margin-top: 16px;
+  margin-top: 22px;
   z-index: 5;
   text-align: center;
 }
@@ -418,7 +426,6 @@ body {
   font-weight: 600;
 }
 
-/* Botón de ubicación en la columna LUGAR */
 .location-btn {
   display: inline-block;
   margin-top: 3px;
@@ -463,7 +470,7 @@ body {
   line-height: 1;
 }
 
-/* RSVP Footer con flechita */
+/* RSVP Footer */
 .rsvp-section {
   margin-top: 12px;
   text-align: center;
@@ -480,12 +487,11 @@ body {
 }
 
 .down-arrow {
-  margin: 4px 0 4px 0;
+  margin: 4px 0;
   line-height: 1;
   animation: bounceArrow 1.3s infinite ease-in-out;
 }
 
-/* Botón inferior con pulso luminoso sutil */
 .open-rsvp-btn {
   padding: 8px 20px;
   background: linear-gradient(135deg, #9e0914 0%, #5e030a 100%);
@@ -506,7 +512,17 @@ body {
   background: linear-gradient(135deg, #c90e1c 0%, #7a040d 100%);
 }
 
-/* Ficha de casino principal XV girando suavemente */
+.open-rsvp-btn:disabled {
+  background: #2b1416;
+  color: rgba(243, 210, 153, 0.45);
+  border-color: rgba(212, 175, 115, 0.35);
+  animation: none;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Fichas y cartas inferiores */
 .chip-xv {
   position: absolute;
   bottom: 42px;
@@ -541,7 +557,6 @@ body {
   animation: spinReverseSlow 24s linear infinite;
 }
 
-/* Ficha inferior derecha girando en sentido contrario */
 .chip-bottom-right {
   position: absolute;
   bottom: 14px;
@@ -551,7 +566,7 @@ body {
   border-radius: 50%;
   background: #0d0909;
   border: 5px dashed #d4af73;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.9);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -561,7 +576,6 @@ body {
   animation: spinReverseSlow 18s linear infinite;
 }
 
-/* Abanico inferior derecho de cartas con flotación sutil */
 .bottom-cards {
   position: absolute;
   bottom: 16px;
@@ -582,7 +596,7 @@ body {
   font-size: 11px;
   color: #b80d19;
   margin-left: -24px;
-  box-shadow: -3px 0 8px rgba(0,0,0,0.85);
+  box-shadow: -3px 0 8px rgba(0, 0, 0, 0.85);
 }
 
 .bottom-card:nth-child(1) { transform: rotate(-32deg) translateY(14px); }
@@ -591,7 +605,7 @@ body {
 .bottom-card:nth-child(4) { transform: rotate(4deg); }
 .bottom-card:nth-child(5) { transform: rotate(16deg) translateY(4px); }
 
-/* Copa Mocktail decorativa superior izquierda */
+/* Adornos superiores */
 .martini-top-left {
   position: absolute;
   top: 12px;
@@ -604,7 +618,6 @@ body {
   animation: floatGentle 5s ease-in-out infinite;
 }
 
-/* Corona / Tiara dorada superior derecha */
 .crown-ornament {
   position: absolute;
   top: 22px;
@@ -614,7 +627,7 @@ body {
   animation: crownFloat 3.8s ease-in-out infinite;
 }
 
-/* ================= ESTILOS DEL CUESTIONARIO (MODAL) ================= */
+/* ================= CUESTIONARIO (MODAL VIP) ================= */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -702,7 +715,6 @@ body {
   box-shadow: 0 0 8px rgba(255, 59, 73, 0.4);
 }
 
-/* Opciones de Colegio / No estoy en el colegio */
 .radio-options {
   display: flex;
   gap: 10px;
@@ -740,9 +752,9 @@ body {
   box-shadow: 0 0 10px rgba(255, 59, 73, 0.35);
 }
 
-/* ================= CRONÓMETRO DENTRO DEL MODAL ================= */
+/* Cronómetro dentro del modal */
 .modal-countdown-block {
-  margin: 14px 0 14px 0;
+  margin: 14px 0;
   padding: 10px 8px;
   background: rgba(18, 9, 9, 0.9);
   border: 1px solid rgba(212, 175, 115, 0.45);
@@ -828,15 +840,148 @@ body {
   letter-spacing: 0.4px;
 }
 
-.success-msg {
+.oculto {
+  display: none !important;
+}
+
+/* ================= VENTANA EMERGENTE DE CONFIRMACIÓN / ALERTA ================= */
+.alert-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(5px);
   display: none;
-  margin-top: 14px;
-  padding: 10px;
-  border: 1px solid #d4af73;
-  background: rgba(212, 175, 115, 0.1);
-  font-size: 11px;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.alert-overlay.active {
+  display: flex;
+}
+
+.alert-box {
+  width: 100%;
+  max-width: 340px;
+  background: #080303;
+  border: 2px solid #d4af73;
+  padding: 28px 22px;
+  text-align: center;
+  color: #e6d5b8;
+  animation: popAlert 0.3s ease-out;
+}
+
+.alert-box.exito {
+  border-color: #f3d299;
+  box-shadow: 0 0 35px rgba(184, 13, 25, 0.75), 0 0 15px rgba(243, 210, 153, 0.4);
+}
+
+.alert-box.exito .alert-icon {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 12px auto;
+  border-radius: 50%;
+  border: 2px solid #34d399;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px rgba(52, 211, 153, 0.5);
+}
+
+.alert-box.exito .alert-title {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-shadow: 0 0 10px #ff3b49;
+  margin-bottom: 10px;
+}
+
+.alert-box.duplicado {
+  border-color: #f59e0b;
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.45);
+}
+
+.alert-box.duplicado .alert-icon {
+  font-size: 30px;
+  color: #fbbf24;
+  margin-bottom: 8px;
+}
+
+.alert-box.duplicado .alert-title {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  color: #fbbf24;
+  margin-bottom: 10px;
+}
+
+.alert-body {
+  font-family: 'Playfair Display', serif;
+  font-size: 13.5px;
   line-height: 1.5;
   color: #f3d299;
+  margin-bottom: 18px;
+}
+
+.alert-sub-text {
+  display: block;
+  margin-top: 8px;
+  font-size: 11.5px;
+  color: #d4af73;
+}
+
+.alert-close-btn {
+  width: 100%;
+  padding: 11px;
+  background: linear-gradient(135deg, #b80d19 0%, #6b040c 100%);
+  border: 1px solid #f3d299;
+  color: #f3d299;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+
+.alert-close-btn:hover {
+  background: linear-gradient(135deg, #db1220 0%, #8a0510 100%);
+}
+
+/* ================= BOTÓN FLOTANTE DE MÚSICA ================= */
+.music-btn {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(28, 10, 12, 0.88);
+  border: 1.5px solid #d4af73;
+  color: #f3d299;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 999;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.music-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 14px rgba(212, 175, 115, 0.5);
+}
+
+.music-btn.playing {
+  animation: pulsoMusica 2s infinite;
 }
 
 /* ================= ADAPTACIÓN RESPONSIVA PARA CELULARES ================= */
@@ -882,7 +1027,7 @@ body {
 
   .side-cheers {
     left: 14px;
-    top: 215px;
+    top: 205px;
   }
 
   .side-cheers .script-gold {
@@ -895,43 +1040,43 @@ body {
   }
 
   .dress-code-arrow {
-    right: 14px;
-    top: 106px;
+    right: 8px;
+    top: 98px;
   }
 
   .dress-code-arrow svg {
-    width: 66px;
-    height: 102px;
+    width: 64px;
+    height: 98px;
   }
 
   .lucky-card {
-    right: 20px;
-    top: 205px;
-    width: 68px;
-    height: 94px;
+    right: 12px;
+    top: 182px;
+    min-width: 90px;
+    padding: 8px 10px;
   }
 
   .lucky-card .script-gold {
-    font-size: 21px;
+    font-size: 22px;
   }
 
   .lucky-card .sub {
-    font-size: 7px;
-    letter-spacing: 1px;
+    font-size: 9.5px;
+    letter-spacing: 2px;
   }
 
   .card-swatches {
-    gap: 3px;
-    margin-top: 6px;
+    gap: 5px;
+    margin-top: 5px;
   }
 
   .swatch {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
   }
 
   .details-grid {
-    margin-top: 16px;
+    margin-top: 24px;
   }
 
   .detail-col {
@@ -1015,568 +1160,5 @@ body {
 
   .countdown-box span:first-child {
     font-size: 14px;
-  }
-}
-
-/* ================= CONTROL DE VISIBILIDAD Y ALERTAS VIP ================= */
-.oculto {
-  display: none !important;
-}
-
-.success-msg.visible {
-  display: block;
-}
-
-@keyframes popInVip {
-  0% {
-    opacity: 0;
-    transform: scale(0.88);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes shakeAlert {
-  0%, 100% { transform: translateX(0); }
-  20%, 60% { transform: translateX(-6px); }
-  40%, 80% { transform: translateX(6px); }
-}
-
-/* Tarjeta de Registro Exitoso */
-.success-msg.vip-confirmed {
-  margin-top: 8px;
-  padding: 22px 16px;
-  background: radial-gradient(circle at top, rgba(184, 13, 25, 0.38) 0%, #0d0404 80%);
-  border: 2px solid #f3d299;
-  border-radius: 6px;
-  box-shadow: 0 0 28px rgba(243, 210, 153, 0.45), inset 0 0 15px rgba(255, 59, 73, 0.25);
-  animation: popInVip 0.35s ease-out forwards;
-}
-
-.vip-badge {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  color: #050202;
-  background: linear-gradient(135deg, #f3d299 0%, #d4af73 100%);
-  padding: 5px 10px;
-  border-radius: 3px;
-  display: inline-block;
-  margin-bottom: 12px;
-}
-
-.vip-check {
-  width: 48px;
-  height: 48px;
-  margin: 0 auto 10px auto;
-  border-radius: 50%;
-  background: rgba(16, 185, 129, 0.15);
-  border: 2px solid #34d399;
-  color: #34d399;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 16px rgba(52, 211, 153, 0.5);
-}
-
-.vip-name {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 6px;
-  text-shadow: 0 0 8px rgba(243, 210, 153, 0.5);
-}
-
-.vip-detail {
-  font-size: 11px;
-  color: #d4af73;
-  letter-spacing: 1px;
-  margin-bottom: 12px;
-}
-
-.vip-text {
-  font-family: 'Playfair Display', serif;
-  font-size: 13px;
-  line-height: 1.5;
-  color: #e6d5b8;
-  margin-bottom: 16px;
-}
-
-.vip-done-btn {
-  width: 100%;
-  padding: 11px;
-  background: linear-gradient(135deg, #d4af73 0%, #a67c37 100%);
-  border: 1px solid #fff;
-  color: #080303;
-  font-family: 'Cinzel', serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1.8px;
-  cursor: pointer;
-  border-radius: 3px;
-  box-shadow: 0 0 14px rgba(243, 210, 153, 0.5);
-  transition: transform 0.2s ease;
-}
-
-.vip-done-btn:hover {
-  transform: scale(1.02);
-}
-
-/* Alerta de Nombre Duplicado */
-.success-msg.alert-duplicate {
-  margin-top: 14px;
-  padding: 14px 12px;
-  background: rgba(217, 119, 6, 0.18);
-  border: 1.5px solid #f59e0b;
-  border-radius: 4px;
-  color: #fef3c7;
-  box-shadow: 0 0 18px rgba(245, 158, 11, 0.35);
-  animation: shakeAlert 0.4s ease-in-out;
-}
-
-.alert-duplicate .alert-icon {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: #fbbf24;
-  margin-bottom: 6px;
-}
-
-.alert-duplicate p {
-  font-family: 'Playfair Display', serif;
-  font-size: 13px;
-  margin-bottom: 4px;
-  color: #fff;
-}
-
-.alert-duplicate .alert-sub {
-  display: block;
-  font-size: 10.5px;
-  color: #fcd34d;
-  line-height: 1.4;
-}
-
-/* Alerta de Error de Red */
-.success-msg.alert-error {
-  border-color: #ff3b49;
-  background: rgba(184, 13, 25, 0.25);
-  color: #ffccd0;
-}
-
-/* ================= RESALTE DE CONFIRMACIÓN Y DUPLICADO ================= */
-.success-msg.msg-confirmado {
-  padding: 16px 14px;
-  border: 2px solid #f3d299;
-  background: rgba(184, 13, 25, 0.35);
-  box-shadow: 0 0 22px rgba(243, 210, 153, 0.45);
-  font-size: 12.5px;
-}
-
-.msg-titulo-exito {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  color: #ffffff;
-  text-shadow: 0 0 8px #ff3b49;
-  margin-bottom: 6px;
-}
-
-.msg-sub-exito {
-  display: block;
-  margin-top: 6px;
-  color: #ffffff;
-  font-weight: 700;
-}
-
-.success-msg.msg-duplicado {
-  padding: 14px 12px;
-  border: 1.5px solid #f59e0b;
-  background: rgba(217, 119, 6, 0.22);
-  color: #fef3c7;
-  box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
-  font-size: 12px;
-}
-
-.msg-titulo-alerta {
-  font-size: 12.5px;
-  letter-spacing: 1px;
-  color: #fbbf24;
-}
-
-/* ================= VENTANA EMERGENTE DE CONFIRMACIÓN / ALERTA ================= */
-.alert-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.88);
-  backdrop-filter: blur(5px);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 200;
-  padding: 20px;
-}
-
-.alert-overlay.active {
-  display: flex;
-}
-
-.alert-box {
-  width: 100%;
-  max-width: 340px;
-  background: #080303;
-  border: 2px solid #d4af73;
-  padding: 28px 22px;
-  text-align: center;
-  color: #e6d5b8;
-  animation: popAlert 0.3s ease-out;
-}
-
-@keyframes popAlert {
-  0% { opacity: 0; transform: scale(0.85); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-/* Estilo cuando es Confirmación Exitosa */
-.alert-box.exito {
-  border-color: #f3d299;
-  box-shadow: 0 0 35px rgba(184, 13, 25, 0.75), 0 0 15px rgba(243, 210, 153, 0.4);
-}
-
-.alert-box.exito .alert-icon {
-  width: 50px;
-  height: 50px;
-  margin: 0 auto 12px auto;
-  border-radius: 50%;
-  border: 2px solid #34d399;
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
-  font-size: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 16px rgba(52, 211, 153, 0.5);
-}
-
-.alert-box.exito .alert-title {
-  font-family: 'Cinzel', serif;
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  color: #ffffff;
-  text-shadow: 0 0 10px #ff3b49;
-  margin-bottom: 10px;
-}
-
-/* Estilo cuando ya estaba en la lista */
-.alert-box.duplicado {
-  border-color: #f59e0b;
-  box-shadow: 0 0 30px rgba(245, 158, 11, 0.45);
-}
-
-.alert-box.duplicado .alert-icon {
-  font-size: 30px;
-  color: #fbbf24;
-  margin-bottom: 8px;
-}
-
-.alert-box.duplicado .alert-title {
-  font-family: 'Cinzel', serif;
-  font-size: 15px;
-  font-weight: 700;
-  letter-spacing: 1.8px;
-  color: #fbbf24;
-  margin-bottom: 10px;
-}
-
-.alert-body {
-  font-family: 'Playfair Display', serif;
-  font-size: 13.5px;
-  line-height: 1.5;
-  color: #f3d299;
-  margin-bottom: 18px;
-}
-
-.alert-sub-text {
-  display: block;
-  margin-top: 8px;
-  font-size: 11.5px;
-  color: #d4af73;
-}
-
-.alert-close-btn {
-  width: 100%;
-  padding: 11px;
-  background: linear-gradient(135deg, #b80d19 0%, #6b040c 100%);
-  border: 1px solid #f3d299;
-  color: #f3d299;
-  font-family: 'Cinzel', serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  cursor: pointer;
-}
-
-.alert-close-btn:hover {
-  background: linear-gradient(135deg, #db1220 0%, #8a0510 100%);
-}
-
-/* ================= BOTÓN DE ASISTENCIA DESHABILITADO (AFORO / FECHA CERRADA) ================= */
-.open-rsvp-btn:disabled {
-  background: #2b1416;
-  color: rgba(243, 210, 153, 0.45);
-  border-color: rgba(212, 175, 115, 0.35);
-  animation: none;
-  box-shadow: none;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.open-rsvp-btn:disabled:hover {
-  background: #2b1416;
-  box-shadow: none;
-  transform: none;
-}
-
-/* ================= BOTÓN FLOTANTE DE MÚSICA ================= */
-.music-btn {
-  position: fixed;
-  top: 18px;
-  right: 18px;
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: rgba(28, 10, 12, 0.88);
-  border: 1.5px solid #d4af73;
-  color: #f3d299;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 999;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.music-btn:hover {
-  transform: scale(1.08);
-  box-shadow: 0 0 14px rgba(212, 175, 115, 0.5);
-}
-
-.music-btn.playing {
-  animation: pulsoMusica 2s infinite;
-}
-
-@keyframes pulsoMusica {
-  0% { box-shadow: 0 0 0 0 rgba(212, 175, 115, 0.55); }
-  70% { box-shadow: 0 0 0 10px rgba(212, 175, 115, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(212, 175, 115, 0); }
-}
-
-/* ================= DRESS CODE MÁS GRANDE Y NOTORIO ================= */
-.lucky-card {
-  transform: scale(1.22) rotate(5deg);
-  padding: 12px 14px;
-  border: 1.8px solid #f3d299;
-  background: linear-gradient(145deg, rgba(35, 8, 12, 0.96), rgba(12, 4, 6, 0.98));
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.75), 0 0 18px rgba(243, 210, 153, 0.35);
-  z-index: 15;
-}
-
-.lucky-card .script-gold {
-  font-size: 26px;
-  line-height: 1;
-  text-shadow: 0 0 10px rgba(243, 210, 153, 0.5);
-}
-
-.lucky-card .sub {
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  color: #ffffff;
-  margin-top: 2px;
-}
-
-.card-swatches {
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.card-swatches .swatch {
-  width: 22px;
-  height: 22px;
-  border-radius: 5px;
-  border: 1.5px solid #f3d299;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.6);
-}
-
-/* Ajuste responsivo para celulares pequeños */
-@media (max-width: 480px) {
-  .lucky-card {
-    transform: scale(1.14) rotate(5deg);
-    right: 12px;
-  }
-}
-/* ================= DRESS CODE AJUSTADO A LA CARTA NEGRA ================= */
-.lucky-card {
-  width: auto !important;
-  min-width: 108px;
-  height: auto !important;
-  padding: 12px 14px !important;
-  top: 238px;
-  right: 16px;
-  transform: rotate(5deg);
-  border: 1.8px solid #f3d299;
-  border-radius: 10px;
-  background: linear-gradient(145deg, rgba(28, 7, 10, 0.96), rgba(10, 3, 5, 0.98));
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 16px rgba(243, 210, 153, 0.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  z-index: 15;
-}
-
-.lucky-card .script-gold {
-  font-size: 27px;
-  line-height: 1;
-  text-shadow: 0 0 10px rgba(243, 210, 153, 0.5);
-}
-
-.lucky-card .sub {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  color: #ffffff;
-  margin-top: 3px;
-}
-
-.card-swatches {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  margin-top: 8px;
-}
-
-.card-swatches .swatch {
-  width: 21px;
-  height: 21px;
-  border-radius: 5px;
-  border: 1.5px solid #f3d299;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.65);
-  flex-shrink: 0;
-}
-
-/* Ajuste responsivo para celulares */
-@media (max-width: 480px) {
-  .lucky-card {
-    min-width: 96px;
-    padding: 10px 11px !important;
-    right: 10px;
-    top: 232px;
-  }
-
-  .lucky-card .script-gold {
-    font-size: 24px;
-  }
-
-  .card-swatches {
-    gap: 5px;
-  }
-
-  .card-swatches .swatch {
-    width: 18px;
-    height: 18px;
-  }
-}
-/* ================= DRESS CODE Y FLECHA SUBIDOS Y ALINEADOS ================= */
-.dress-code-arrow {
-  top: 132px !important;
-  right: 12px !important;
-}
-
-.lucky-card {
-  width: auto !important;
-  min-width: 108px;
-  height: auto !important;
-  padding: 11px 14px !important;
-  top: 215px !important;
-  right: 16px;
-  transform: rotate(5deg);
-  border: 1.8px solid #f3d299;
-  border-radius: 10px;
-  background: linear-gradient(145deg, rgba(28, 7, 10, 0.96), rgba(10, 3, 5, 0.98));
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8), 0 0 16px rgba(243, 210, 153, 0.3);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  box-sizing: border-box;
-  z-index: 15;
-}
-
-.lucky-card .script-gold {
-  font-size: 27px;
-  line-height: 1;
-  text-shadow: 0 0 10px rgba(243, 210, 153, 0.5);
-}
-
-.lucky-card .sub {
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 2.5px;
-  color: #ffffff;
-  margin-top: 3px;
-}
-
-.card-swatches {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 7px;
-  margin-top: 8px;
-}
-
-.card-swatches .swatch {
-  width: 21px;
-  height: 21px;
-  border-radius: 5px;
-  border: 1.5px solid #f3d299;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.65);
-  flex-shrink: 0;
-}
-
-/* Ajuste responsivo para celulares */
-@media (max-width: 480px) {
-  .dress-code-arrow {
-    top: 125px !important;
-    right: 6px !important;
-  }
-
-  .lucky-card {
-    min-width: 94px;
-    padding: 9px 11px !important;
-    right: 10px;
-    top: 205px !important;
-  }
-
-  .lucky-card .script-gold {
-    font-size: 23px;
-  }
-
-  .card-swatches {
-    gap: 5px;
-    margin-top: 6px;
-  }
-
-  .card-swatches .swatch {
-    width: 17px;
-    height: 17px;
   }
 }
