@@ -1,6 +1,6 @@
 // 1. Credenciales de Supabase
 const SUPABASE_URL = 'https://wvykyrjebtayldqsfltc.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_zhCD-gCE5bMkm-3RvCUQ4Q_kv7wfjtl';
+const SUPABASE_KEY = 'sb_publishable_zhCD-gCE5bMkm3RvCUQ4Q_kv7wfjtl';
 const db = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY) : null;
 
 const modal = document.getElementById('rsvpModal');
@@ -8,14 +8,17 @@ const btnAbrir = document.getElementById('btnAbrir');
 const btnCerrar = document.getElementById('btnCerrar');
 const formulario = document.getElementById('rsvpForm');
 const mensajeBox = document.getElementById('successMsg');
-
 const radiosTipo = document.querySelectorAll('input[name="tipoInvitado"]');
 const grupoColegio = document.getElementById('grupoNombreColegio');
 const inputColegio = document.getElementById('nombreColegio');
 
 function escapeHTML(str) {
   return String(str).replace(/[&<>"']/g, m => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
   }[m]));
 }
 
@@ -91,11 +94,13 @@ formulario.addEventListener('submit', async (evento) => {
 
   const nombre = document.getElementById('nombreCompleto').value.trim();
   const opcionElegida = document.querySelector('input[name="tipoInvitado"]:checked').value;
-  const colegioFinal = opcionElegida === 'colegio' 
-    ? inputColegio.value.trim() 
+
+  const colegioFinal = opcionElegida === 'colegio'
+    ? inputColegio.value.trim()
     : 'No estoy en el colegio';
 
   const btnSubmit = formulario.querySelector('button[type="submit"]');
+
   btnSubmit.disabled = true;
   btnSubmit.textContent = 'REGISTRANDO...';
 
@@ -103,17 +108,18 @@ formulario.addEventListener('submit', async (evento) => {
   if (db) {
     const { error } = await db
       .from('invitados')
-      .insert([{ 
-        nombre_completo: nombre, 
-        colegio: colegioFinal, 
-        codigo_vip: 'N/A' 
+      .insert([{
+        nombre_completo: nombre,
+        colegio: colegioFinal
       }]);
 
     if (error) {
       btnSubmit.disabled = false;
       btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
+
       mensajeBox.style.display = 'block';
       mensajeBox.textContent = 'Hubo un problema al registrar. Intenta nuevamente.';
+
       console.error('Error Supabase:', error);
       return;
     }
