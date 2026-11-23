@@ -307,18 +307,23 @@ body {
   margin-top: 4px;
 }
 
-/* Flecha apuntando al Dress Code */
+/* Flecha apuntando al borde superior del Dress Code */
 .dress-code-arrow {
   position: absolute;
-  right: 16px;
-  top: 112px;
-  z-index: 7;
+  right: 22px;
+  top: 90px;
+  z-index: 16;
   pointer-events: none;
   filter: drop-shadow(0 0 8px rgba(255, 59, 73, 0.75));
   animation: pointLeft 1.5s ease-in-out infinite;
 }
 
-/* Carta lateral derecha con Dress Code (subida para no tocar la copa) */
+.dress-code-arrow svg {
+  width: 72px;
+  height: 108px;
+}
+
+/* Carta lateral derecha con Dress Code */
 .lucky-card {
   position: absolute;
   right: 20px;
@@ -1040,43 +1045,46 @@ body {
   }
 
   .dress-code-arrow {
-    right: 8px;
-    top: 98px;
+    right: 12px;
+    top: 76px;
+    z-index: 16;
   }
 
   .dress-code-arrow svg {
-    width: 64px;
-    height: 98px;
+    width: 54px;
+    height: 82px;
   }
 
   .lucky-card {
-    right: 12px;
-    top: 182px;
-    min-width: 90px;
-    padding: 8px 10px;
+    right: 10px;
+    top: 162px;
+    min-width: 82px;
+    padding: 7px 9px;
   }
 
   .lucky-card .script-gold {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .lucky-card .sub {
-    font-size: 9.5px;
-    letter-spacing: 2px;
+    font-size: 8.5px;
+    letter-spacing: 1.8px;
+    margin-top: 2px;
   }
 
   .card-swatches {
-    gap: 5px;
+    gap: 4px;
     margin-top: 5px;
   }
 
   .swatch {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
+    border-radius: 4px;
   }
 
   .details-grid {
-    margin-top: 24px;
+    margin-top: 28px;
   }
 
   .detail-col {
