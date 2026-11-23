@@ -12,6 +12,14 @@ const radiosTipo = document.querySelectorAll('input[name="tipoInvitado"]');
 const grupoColegio = document.getElementById('grupoNombreColegio');
 const inputColegio = document.getElementById('nombreColegio');
 
+// Elementos de la ventana emergente de confirmación / alerta
+const alertModal = document.getElementById('customAlertModal');
+const alertBox = document.getElementById('customAlertBox');
+const alertIcon = document.getElementById('customAlertIcon');
+const alertTitle = document.getElementById('customAlertTitle');
+const alertBody = document.getElementById('customAlertBody');
+const btnCerrarAlerta = document.getElementById('btnCerrarAlerta');
+
 function escapeHTML(str) {
   return String(str).replace(/[&<>"']/g, m => ({
     '&': '&amp;',
@@ -21,6 +29,25 @@ function escapeHTML(str) {
     "'": '&#39;'
   }[m]));
 }
+
+function mostrarVentanaEmergente(tipo, titulo, htmlMensaje, textoBoton) {
+  alertBox.className = 'alert-box ' + tipo;
+  alertIcon.textContent = tipo === 'exito' ? '✔' : '♠️';
+  alertTitle.textContent = titulo;
+  alertBody.innerHTML = htmlMensaje;
+  btnCerrarAlerta.textContent = textoBoton;
+  alertModal.classList.add('active');
+}
+
+btnCerrarAlerta.addEventListener('click', () => {
+  alertModal.classList.remove('active');
+});
+
+alertModal.addEventListener('click', (e) => {
+  if (e.target === alertModal) {
+    alertModal.classList.remove('active');
+  }
+});
 
 // ================= CRONÓMETRO (4 DE DICIEMBRE 2026 - 9:00 PM HORA PERÚ) =================
 const fechaEvento = new Date('2026-12-04T21:00:00-05:00').getTime();
@@ -61,7 +88,6 @@ setInterval(actualizarCronometro, 1000);
 // Abrir y cerrar modal
 btnAbrir.addEventListener('click', () => {
   mensajeBox.style.display = 'none';
-  mensajeBox.className = 'success-msg';
   modal.classList.add('active');
 });
 
@@ -93,19 +119,17 @@ radiosTipo.forEach(radio => {
 formulario.addEventListener('submit', async (evento) => {
   evento.preventDefault();
 
-  const nombre = document.getElementById('nombreCompleto').value.trim();
+  const nombre = document.getElementById('nombreCompleto').value.trim().replace(/\s+/g, ' ');
   const opcionElegida = document.querySelector('input[name="tipoInvitado"]:checked').value;
 
   const colegioFinal = opcionElegida === 'colegio'
-    ? inputColegio.value.trim()
+    ? inputColegio.value.trim().replace(/\s+/g, ' ')
     : 'No estoy en el colegio';
 
   const btnSubmit = formulario.querySelector('button[type="submit"]');
 
   btnSubmit.disabled = true;
   btnSubmit.textContent = 'VERIFICANDO...';
-  mensajeBox.style.display = 'none';
-  mensajeBox.className = 'success-msg';
 
   // Guardar en Supabase
   if (db) {
@@ -119,27 +143,31 @@ formulario.addEventListener('submit', async (evento) => {
       btnSubmit.disabled = false;
       btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
 
-      mensajeBox.style.display = 'block';
-      mensajeBox.textContent = 'Hubo un problema al verificar la lista. Intenta nuevamente.';
+      mostrarVentanaEmergente(
+        'duplicado',
+        'ERROR DE CONEXIÓN',
+        'Hubo un problema al verificar la lista. Intenta nuevamente.',
+        'ENTENDIDO'
+      );
       console.error('Error búsqueda Supabase:', errorBusqueda);
       return;
     }
 
-    // Si ya está registrado, no dejar continuar y avisar
+    // Si ya está registrado, mostrar ventana emergente y detener
     if (existentes && existentes.length > 0) {
       btnSubmit.disabled = false;
       btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
 
-      mensajeBox.classList.add('msg-duplicado');
-      mensajeBox.style.display = 'block';
-      mensajeBox.innerHTML = `
-        <strong class="msg-titulo-alerta">⚠️ ¡YA ESTÁS EN LA LISTA!</strong><br>
-        El nombre <strong>${escapeHTML(nombre)}</strong> ya se encuentra registrado en el sistema. No hace falta volver a enviarlo.
-      `;
+      mostrarVentanaEmergente(
+        'duplicado',
+        '¡YA ESTÁS EN LA LISTA!',
+        `El nombre <strong>${escapeHTML(nombre)}</strong> ya se encuentra registrado en el sistema.<br><br>No es necesario volver a enviarlo.`,
+        'ENTENDIDO'
+      );
       return;
     }
 
-    // 2. Si no existe, registrar normalmente
+    // 2. Si no existe, registrar
     btnSubmit.textContent = 'REGISTRANDO...';
 
     const { error } = await db
@@ -153,9 +181,12 @@ formulario.addEventListener('submit', async (evento) => {
       btnSubmit.disabled = false;
       btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
 
-      mensajeBox.style.display = 'block';
-      mensajeBox.textContent = 'Hubo un problema al registrar. Intenta nuevamente.';
-
+      mostrarVentanaEmergente(
+        'duplicado',
+        'ERROR AL REGISTRAR',
+        'Hubo un problema al guardar tu registro. Intenta nuevamente.',
+        'ENTENDIDO'
+      );
       console.error('Error Supabase:', error);
       return;
     }
@@ -164,16 +195,15 @@ formulario.addEventListener('submit', async (evento) => {
   btnSubmit.disabled = false;
   btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
 
-  mensajeBox.classList.add('msg-confirmado');
-  mensajeBox.style.display = 'block';
-  mensajeBox.innerHTML = `
-    <div class="msg-titulo-exito">★ ¡ASISTENCIA CONFIRMADA! ★</div>
-    ¡Gracias, <strong>${escapeHTML(nombre)}</strong>!<br>
-    Procedencia: <strong>${escapeHTML(colegioFinal)}</strong><br>
-    <span class="msg-sub-exito">Ya estás oficialmente en la lista VIP.</span>
-  `;
-
   formulario.reset();
   grupoColegio.style.display = 'block';
   inputColegio.required = true;
+  modal.classList.remove('active');
+
+  mostrarVentanaEmergente(
+    'exito',
+    '¡REGISTRO CONFIRMADO!',
+    `¡Gracias, <strong>${escapeHTML(nombre)}</strong>!<br>Tu nombre ya está en la lista VIP.<br><span class="alert-sub-text">Procedencia: ${escapeHTML(colegioFinal)}</span>`,
+    '¡GENIAL, NOS VEMOS AHÍ!'
+  );
 });

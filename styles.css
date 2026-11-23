@@ -1206,3 +1206,120 @@ body {
   letter-spacing: 1px;
   color: #fbbf24;
 }
+
+/* ================= VENTANA EMERGENTE DE CONFIRMACIÓN / ALERTA ================= */
+.alert-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(5px);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 200;
+  padding: 20px;
+}
+
+.alert-overlay.active {
+  display: flex;
+}
+
+.alert-box {
+  width: 100%;
+  max-width: 340px;
+  background: #080303;
+  border: 2px solid #d4af73;
+  padding: 28px 22px;
+  text-align: center;
+  color: #e6d5b8;
+  animation: popAlert 0.3s ease-out;
+}
+
+@keyframes popAlert {
+  0% { opacity: 0; transform: scale(0.85); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Estilo cuando es Confirmación Exitosa */
+.alert-box.exito {
+  border-color: #f3d299;
+  box-shadow: 0 0 35px rgba(184, 13, 25, 0.75), 0 0 15px rgba(243, 210, 153, 0.4);
+}
+
+.alert-box.exito .alert-icon {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 12px auto;
+  border-radius: 50%;
+  border: 2px solid #34d399;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 16px rgba(52, 211, 153, 0.5);
+}
+
+.alert-box.exito .alert-title {
+  font-family: 'Cinzel', serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-shadow: 0 0 10px #ff3b49;
+  margin-bottom: 10px;
+}
+
+/* Estilo cuando ya estaba en la lista */
+.alert-box.duplicado {
+  border-color: #f59e0b;
+  box-shadow: 0 0 30px rgba(245, 158, 11, 0.45);
+}
+
+.alert-box.duplicado .alert-icon {
+  font-size: 30px;
+  color: #fbbf24;
+  margin-bottom: 8px;
+}
+
+.alert-box.duplicado .alert-title {
+  font-family: 'Cinzel', serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  color: #fbbf24;
+  margin-bottom: 10px;
+}
+
+.alert-body {
+  font-family: 'Playfair Display', serif;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #f3d299;
+  margin-bottom: 18px;
+}
+
+.alert-sub-text {
+  display: block;
+  margin-top: 8px;
+  font-size: 11.5px;
+  color: #d4af73;
+}
+
+.alert-close-btn {
+  width: 100%;
+  padding: 11px;
+  background: linear-gradient(135deg, #b80d19 0%, #6b040c 100%);
+  border: 1px solid #f3d299;
+  color: #f3d299;
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+
+.alert-close-btn:hover {
+  background: linear-gradient(135deg, #db1220 0%, #8a0510 100%);
+}
