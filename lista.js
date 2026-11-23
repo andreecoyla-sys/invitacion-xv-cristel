@@ -1,5 +1,5 @@
 const SUPABASE_URL = 'https://wvykyrjebtayldqsfltc.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_zhCD-gCE5bMkm-3RvCUQ4Q_kv7wfjtl';
+const SUPABASE_KEY = 'sb_publishable_2uaNezvTsyNPlrmXk6gq6g_Q6ZFQ9zO';
 const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const loginScreen = document.getElementById('loginScreen');
