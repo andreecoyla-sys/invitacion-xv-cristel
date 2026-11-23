@@ -61,6 +61,7 @@ setInterval(actualizarCronometro, 1000);
 // Abrir y cerrar modal
 btnAbrir.addEventListener('click', () => {
   mensajeBox.style.display = 'none';
+  mensajeBox.className = 'success-msg';
   modal.classList.add('active');
 });
 
@@ -102,10 +103,45 @@ formulario.addEventListener('submit', async (evento) => {
   const btnSubmit = formulario.querySelector('button[type="submit"]');
 
   btnSubmit.disabled = true;
-  btnSubmit.textContent = 'REGISTRANDO...';
+  btnSubmit.textContent = 'VERIFICANDO...';
+  mensajeBox.style.display = 'none';
+  mensajeBox.className = 'success-msg';
 
   // Guardar en Supabase
   if (db) {
+    // 1. Verificar si el nombre ya existe en la lista
+    const { data: existentes, error: errorBusqueda } = await db
+      .from('invitados')
+      .select('nombre_completo')
+      .ilike('nombre_completo', nombre);
+
+    if (errorBusqueda) {
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
+
+      mensajeBox.style.display = 'block';
+      mensajeBox.textContent = 'Hubo un problema al verificar la lista. Intenta nuevamente.';
+      console.error('Error búsqueda Supabase:', errorBusqueda);
+      return;
+    }
+
+    // Si ya está registrado, no dejar continuar y avisar
+    if (existentes && existentes.length > 0) {
+      btnSubmit.disabled = false;
+      btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
+
+      mensajeBox.classList.add('msg-duplicado');
+      mensajeBox.style.display = 'block';
+      mensajeBox.innerHTML = `
+        <strong class="msg-titulo-alerta">⚠️ ¡YA ESTÁS EN LA LISTA!</strong><br>
+        El nombre <strong>${escapeHTML(nombre)}</strong> ya se encuentra registrado en el sistema. No hace falta volver a enviarlo.
+      `;
+      return;
+    }
+
+    // 2. Si no existe, registrar normalmente
+    btnSubmit.textContent = 'REGISTRANDO...';
+
     const { error } = await db
       .from('invitados')
       .insert([{
@@ -128,11 +164,13 @@ formulario.addEventListener('submit', async (evento) => {
   btnSubmit.disabled = false;
   btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
 
+  mensajeBox.classList.add('msg-confirmado');
   mensajeBox.style.display = 'block';
   mensajeBox.innerHTML = `
+    <div class="msg-titulo-exito">★ ¡ASISTENCIA CONFIRMADA! ★</div>
     ¡Gracias, <strong>${escapeHTML(nombre)}</strong>!<br>
     Procedencia: <strong>${escapeHTML(colegioFinal)}</strong><br>
-    <span style="color:#fff;">¡Tu asistencia ha sido confirmada!</span>
+    <span class="msg-sub-exito">Ya estás oficialmente en la lista VIP.</span>
   `;
 
   formulario.reset();
