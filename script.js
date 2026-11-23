@@ -285,3 +285,41 @@ formulario.addEventListener('submit', async (evento) => {
     '¡GENIAL, NOS VEMOS AHÍ!'
   );
 });
+
+// ================= CONTROL DE MÚSICA AMBIENTAL =================
+const bgMusic = document.getElementById('bgMusic');
+const btnMusic = document.getElementById('btnMusic');
+let musicaIniciada = false;
+
+if (bgMusic && btnMusic) {
+  bgMusic.volume = 0.35;
+
+  function toggleMusica() {
+    if (bgMusic.paused) {
+      bgMusic.play().then(() => {
+        btnMusic.textContent = '🎵';
+        btnMusic.classList.add('playing');
+        musicaIniciada = true;
+      }).catch(() => {});
+    } else {
+      bgMusic.pause();
+      btnMusic.textContent = '🔇';
+      btnMusic.classList.remove('playing');
+    }
+  }
+
+  btnMusic.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toggleMusica();
+  });
+
+  document.addEventListener('click', () => {
+    if (!musicaIniciada && bgMusic.paused) {
+      bgMusic.play().then(() => {
+        btnMusic.textContent = '🎵';
+        btnMusic.classList.add('playing');
+        musicaIniciada = true;
+      }).catch(() => {});
+    }
+  }, { once: true });
+}
