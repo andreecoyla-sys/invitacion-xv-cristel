@@ -180,15 +180,23 @@ async function cargarInvitados() {
     return;
   }
 
-  listaGlobal = data;
+  listaGlobal = data || [];
   actualizarContadores();
-  renderizarTabla(listaGlobal);
+  filtrar();
 }
 
 function actualizarContadores() {
-  document.getElementById('totalRegistrados').textContent = listaGlobal.length;
-  document.getElementById('totalAsistieron').textContent =
-    listaGlobal.filter(i => i.asistio).length;
+  const total = listaGlobal.length;
+  const asistieron = listaGlobal.filter(i => Boolean(i.asistio)).length;
+  const faltan = Math.max(0, total - asistieron);
+
+  const elTotal = document.getElementById('totalRegistrados');
+  const elAsistieron = document.getElementById('totalAsistieron');
+  const elFaltan = document.getElementById('totalFaltan');
+
+  if (elTotal) elTotal.textContent = total;
+  if (elAsistieron) elAsistieron.textContent = asistieron;
+  if (elFaltan) elFaltan.textContent = faltan;
 }
 
 function escapeHTML(str) {
@@ -204,34 +212,43 @@ function escapeHTML(str) {
 function renderizarTabla(datos) {
   const tbody = document.getElementById('tablaInvitados');
 
-  if (datos.length === 0) {
+  if (!datos || datos.length === 0) {
     tbody.innerHTML =
       '<tr><td colspan="4" style="text-align:center;">No hay registros todavía.</td></tr>';
     return;
   }
 
-  tbody.innerHTML = datos.map(inv => `
-    <tr>
-      <td><strong>${escapeHTML(inv.nombre_completo)}</strong></td>
-      <td>${escapeHTML(inv.colegio)}</td>
-      <td>
-        <button
-          class="btn-check ${inv.asistio ? 'btn-asistio' : 'btn-pendiente'}"
-          onclick="cambiarAsistencia(${inv.id}, ${!inv.asistio})"
-        >
-          ${inv.asistio ? '✓ ASISTIÓ' : 'MARCAR INGRESO'}
-        </button>
-      </td>
-      <td>
-        <button
-          class="btn-eliminar"
-          onclick="eliminarInvitado(${inv.id}, '${escapeHTML(inv.nombre_completo).replace(/&#39;/g, "\\'")}')"
-        >
-          ELIMINAR
-        </button>
-      </td>
-    </tr>
-  `).join('');
+  tbody.innerHTML = datos.map(inv => {
+    const asistio = Boolean(inv.asistio);
+    const nombreSeguro = escapeHTML(inv.nombre_completo);
+    const colegioSeguro = escapeHTML(inv.colegio);
+    const nombreJs = nombreSeguro.replace(/&#39;/g, "\\'");
+
+    return `
+      <tr>
+        <td><strong>${nombreSeguro}</strong></td>
+        <td>${colegioSeguro}</td>
+        <td>
+          <button
+            type="button"
+            class="btn-check ${asistio ? 'btn-asistio' : 'btn-pendiente'}"
+            onclick="cambiarAsistencia(${inv.id}, ${!asistio})"
+          >
+            ${asistio ? '✓ ASISTIÓ' : 'MARCAR INGRESO'}
+          </button>
+        </td>
+        <td>
+          <button
+            type="button"
+            class="btn-eliminar"
+            onclick="eliminarInvitado(${inv.id}, '${nombreJs}')"
+          >
+            ELIMINAR
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
 }
 
 async function cambiarAsistencia(id, nuevoEstado) {
@@ -240,10 +257,13 @@ async function cambiarAsistencia(id, nuevoEstado) {
     .update({ asistio: nuevoEstado })
     .eq('id', id);
 
-  if (error) return;
+  if (error) {
+    alert('No se pudo actualizar el estado de asistencia.');
+    console.error(error);
+    return;
+  }
 
   const item = listaGlobal.find(i => i.id === id);
-
   if (item) {
     item.asistio = nuevoEstado;
   }
@@ -264,6 +284,7 @@ async function eliminarInvitado(id, nombre) {
 
   if (error) {
     alert('No se pudo eliminar el registro.');
+    console.error(error);
     return;
   }
 
@@ -273,11 +294,16 @@ async function eliminarInvitado(id, nombre) {
 }
 
 function filtrar() {
-  const texto = document.getElementById('buscador').value.toLowerCase();
+  const texto = document.getElementById('buscador').value.trim().toLowerCase();
+
+  if (!texto) {
+    renderizarTabla(listaGlobal);
+    return;
+  }
 
   const filtrados = listaGlobal.filter(i =>
-    i.nombre_completo.toLowerCase().includes(texto) ||
-    i.colegio.toLowerCase().includes(texto)
+    (i.nombre_completo || '').toLowerCase().includes(texto) ||
+    (i.colegio || '').toLowerCase().includes(texto)
   );
 
   renderizarTabla(filtrados);
