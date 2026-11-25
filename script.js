@@ -20,9 +20,14 @@ const alertTitle = document.getElementById('customAlertTitle');
 const alertBody = document.getElementById('customAlertBody');
 const btnCerrarAlerta = document.getElementById('btnCerrarAlerta');
 
-// Configuración definitiva: HOY Miércoles 25 de Noviembre 2026 a las 12:00 PM (Hora Perú)
+// Configuración definitiva: 500 invitados O Medianoche de hoy Miércoles 25 de Noviembre 2026 (Hora Perú)
 const LIMITE_INVITADOS = 500;
-const FECHA_CIERRE = new Date('2026-11-25T12:00:00-05:00').getTime();
+const FECHA_CIERRE = new Date('2026-11-25T23:59:59-05:00').getTime();
+
+let estadoCierreActual = {
+  cerradoPorHora: false,
+  cerradoPorAforo: false
+};
 
 function escapeHTML(str) {
   return String(str).replace(/[&<>"']/g, m => ({
@@ -43,16 +48,36 @@ function mostrarVentanaEmergente(tipo, titulo, htmlMensaje, textoBoton) {
   alertModal.classList.add('active');
 }
 
-// Mensaje formal y didáctico con temática Vegas Night al cerrar la lista
-function mostrarAvisoCierreLista() {
-  mostrarVentanaEmergente(
-    'duplicado',
-    'LISTA OFICIAL CERRADA',
-    `¡Muchas gracias por tu interés en acompañar a <strong>Cristel</strong> en su noche mágica!<br><br>
-    Te informamos que el plazo de confirmación concluyó hoy <strong>miércoles 25 de noviembre a las 12:00 p. m.</strong>, ya que hemos cerrado nuestra lista oficial para la organización de mesas y control de acceso.<br>
-    <span class="alert-sub-text">✦ Agradecemos profundamente tu comprensión y tus buenos deseos.</span>`,
-    'ENTENDIDO'
-  );
+// Mensaje dinámico según si cerró por hora, por aforo de 500, o por ambos
+function mostrarAvisoCierreDinamico(porHora, porAforo) {
+  if (porHora && porAforo) {
+    mostrarVentanaEmergente(
+      'duplicado',
+      'LISTA Y AFORO CERRADOS',
+      `¡Muchas gracias por tu interés en acompañar a <strong>Cristel</strong> en su noche mágica!<br><br>
+      Te informamos que el registro ha finalizado por dos motivos: hemos alcanzado el límite máximo de <strong>500 invitados</strong> y el plazo de confirmación concluyó hoy <strong>miércoles 25 de noviembre a la medianoche</strong>.<br>
+      <span class="alert-sub-text">✦ Agradecemos profundamente tu comprensión y tus buenos deseos.</span>`,
+      'ENTENDIDO'
+    );
+  } else if (porAforo) {
+    mostrarVentanaEmergente(
+      'duplicado',
+      'AFORO COMPLETO',
+      `¡Muchas gracias por tu interés en acompañar a <strong>Cristel</strong> en su noche mágica!<br><br>
+      Lamentamos informarte que hemos alcanzado el límite máximo de <strong>500 invitados registrados</strong>. Por capacidad del evento, ya no es posible registrar más ingresos.<br>
+      <span class="alert-sub-text">✦ Agradecemos profundamente tu comprensión y tus buenos deseos.</span>`,
+      'ENTENDIDO'
+    );
+  } else if (porHora) {
+    mostrarVentanaEmergente(
+      'duplicado',
+      'LISTA OFICIAL CERRADA',
+      `¡Muchas gracias por tu interés en acompañar a <strong>Cristel</strong> en su noche mágica!<br><br>
+      Te informamos que el plazo de confirmación concluyó hoy <strong>miércoles 25 de noviembre a la medianoche</strong>, ya que hemos cerrado nuestra lista oficial para la organización de mesas y control de acceso.<br>
+      <span class="alert-sub-text">✦ Agradecemos profundamente tu comprensión y tus buenos deseos.</span>`,
+      'ENTENDIDO'
+    );
+  }
 }
 
 btnCerrarAlerta.addEventListener('click', () => {
@@ -101,50 +126,68 @@ function actualizarCronometro() {
 actualizarCronometro();
 setInterval(actualizarCronometro, 1000);
 
-// ================= CIERRE AUTOMÁTICO DEL BOTÓN DE ASISTENCIA =================
-function actualizarEstadoVisualBoton(motivo = 'LISTA CERRADA') {
+// ================= CIERRE AUTOMÁTICO POR HORA Y/O AFORO DE 500 =================
+function actualizarEstadoVisualBoton(porHora, porAforo) {
+  estadoCierreActual = { cerradoPorHora: porHora, cerradoPorAforo: porAforo };
   if (!btnAbrir) return;
-  btnAbrir.textContent = motivo;
-  modal.classList.remove('active');
+
+  if (porHora && porAforo) {
+    btnAbrir.textContent = 'LISTA Y AFORO CERRADOS';
+    modal.classList.remove('active');
+  } else if (porAforo) {
+    btnAbrir.textContent = 'AFORO COMPLETO';
+    modal.classList.remove('active');
+  } else if (porHora) {
+    btnAbrir.textContent = 'LISTA CERRADA';
+    modal.classList.remove('active');
+  }
 }
 
-async function verificarEstadoRegistro() {
-  if (Date.now() >= FECHA_CIERRE) {
-    actualizarEstadoVisualBoton('LISTA CERRADA');
-    return;
-  }
+async function evaluarCondicionesCierre() {
+  const porHora = Date.now() >= FECHA_CIERRE;
+  let porAforo = estadoCierreActual.cerradoPorAforo;
 
   if (db) {
     const { count, error } = await db
       .from('invitados')
       .select('*', { count: 'exact', head: true });
 
-    if (!error && count >= LIMITE_INVITADOS) {
-      btnAbrir.disabled = true;
-      btnAbrir.textContent = 'AFORO COMPLETO';
-      modal.classList.remove('active');
-      mostrarVentanaEmergente(
-        'duplicado',
-        'AFORO COMPLETO',
-        'Lamentamos informarte que hemos alcanzado el límite máximo de <strong>500 invitados registrados</strong>.<br><br>Por capacidad del evento, ya no es posible registrar más ingresos.',
-        'ENTENDIDO'
-      );
+    if (!error) {
+      porAforo = count >= LIMITE_INVITADOS;
     }
   }
+
+  if (porHora || porAforo) {
+    actualizarEstadoVisualBoton(porHora, porAforo);
+  }
+
+  return { porHora, porAforo };
 }
 
-verificarEstadoRegistro();
+// Verificar al cargar la página
+evaluarCondicionesCierre();
+
+// Revisar cada 5 segundos si llegó la medianoche (y verificar aforo si aún no cierra)
 setInterval(() => {
-  if (Date.now() >= FECHA_CIERRE && btnAbrir.textContent !== 'LISTA CERRADA') {
-    actualizarEstadoVisualBoton('LISTA CERRADA');
+  const porHora = Date.now() >= FECHA_CIERRE;
+  if (porHora && !estadoCierreActual.cerradoPorHora) {
+    evaluarCondicionesCierre();
   }
 }, 5000);
 
-// Abrir modal o mostrar aviso de lista cerrada a las 12:00 PM
-btnAbrir.addEventListener('click', () => {
-  if (Date.now() >= FECHA_CIERRE) {
-    actualizarEstadoVisualBoton('LISTA CERRADA');
-    mostrarAvisoCierreLista();
+// Abrir modal o mostrar el motivo exacto de cierre al hacer clic en el botón
+btnAbrir.addEventListener('click', async () => {
+  const porHora = Date.now() >= FECHA_CIERRE;
+  let porAforo = estadoCierreActual.cerradoPorAforo;
+
+  // Si ya figura cerrado, mostrar el aviso inmediato (y confirmar aforo si pasó la hora)
+  if (porHora || porAforo) {
+    const textoOriginal = btnAbrir.textContent;
+    btnAbrir.textContent = 'VERIFICANDO...';
+    const estado = await evaluarCondicionesCierre();
+    btnAbrir.textContent = textoOriginal;
+    actualizarEstadoVisualBoton(estado.porHora, estado.porAforo);
+    mostrarAvisoCierreDinamico(estado.porHora, estado.porAforo);
     return;
   }
 
@@ -180,12 +223,6 @@ radiosTipo.forEach(radio => {
 formulario.addEventListener('submit', async (evento) => {
   evento.preventDefault();
 
-  if (Date.now() >= FECHA_CIERRE) {
-    actualizarEstadoVisualBoton('LISTA CERRADA');
-    mostrarAvisoCierreLista();
-    return;
-  }
-
   const nombre = document.getElementById('nombreCompleto').value.trim().replace(/\s+/g, ' ');
   const opcionElegida = document.querySelector('input[name="tipoInvitado"]:checked').value;
 
@@ -199,25 +236,23 @@ formulario.addEventListener('submit', async (evento) => {
   btnSubmit.textContent = 'VERIFICANDO...';
 
   if (db) {
+    // 0. Evaluar si se cumplió la hora (medianoche), el aforo (500) o ambos
+    const porHora = Date.now() >= FECHA_CIERRE;
     const { count: totalRegistrados, error: errorConteo } = await db
       .from('invitados')
       .select('*', { count: 'exact', head: true });
 
-    if (!errorConteo && totalRegistrados >= LIMITE_INVITADOS) {
+    const porAforo = !errorConteo && totalRegistrados >= LIMITE_INVITADOS;
+
+    if (porHora || porAforo) {
       btnSubmit.disabled = false;
       btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
-      btnAbrir.disabled = true;
-      btnAbrir.textContent = 'AFORO COMPLETO';
-      modal.classList.remove('active');
-      mostrarVentanaEmergente(
-        'duplicado',
-        'AFORO COMPLETO',
-        'Lamentamos informarte que hemos alcanzado el límite máximo de <strong>500 invitados registrados</strong>.<br><br>Por capacidad del evento, ya no es posible registrar más ingresos.',
-        'ENTENDIDO'
-      );
+      actualizarEstadoVisualBoton(porHora, porAforo);
+      mostrarAvisoCierreDinamico(porHora, porAforo);
       return;
     }
 
+    // 1. Verificar si el nombre ya existe en la lista
     const { data: existentes, error: errorBusqueda } = await db
       .from('invitados')
       .select('nombre_completo')
@@ -250,6 +285,7 @@ formulario.addEventListener('submit', async (evento) => {
       return;
     }
 
+    // 2. Si no existe, registrar
     btnSubmit.textContent = 'REGISTRANDO...';
 
     const { error } = await db
@@ -273,9 +309,9 @@ formulario.addEventListener('submit', async (evento) => {
       return;
     }
 
+    // Si con este registro se llegó al invitado 500, actualizar estado del botón al instante
     if (!errorConteo && (totalRegistrados + 1) >= LIMITE_INVITADOS) {
-      btnAbrir.disabled = true;
-      btnAbrir.textContent = 'AFORO COMPLETO';
+      actualizarEstadoVisualBoton(Date.now() >= FECHA_CIERRE, true);
     }
   }
 
