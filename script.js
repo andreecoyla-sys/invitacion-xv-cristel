@@ -20,9 +20,9 @@ const alertTitle = document.getElementById('customAlertTitle');
 const alertBody = document.getElementById('customAlertBody');
 const btnCerrarAlerta = document.getElementById('btnCerrarAlerta');
 
-// MODO PRUEBA: Configurado a las 9:00 AM de hoy miércoles 25 de noviembre
+// Configuración definitiva: HOY Miércoles 25 de Noviembre 2026 a las 12:00 PM (Hora Perú)
 const LIMITE_INVITADOS = 500;
-const FECHA_CIERRE = new Date('2026-11-25T09:00:00-05:00').getTime();
+const FECHA_CIERRE = new Date('2026-11-25T12:00:00-05:00').getTime();
 
 function escapeHTML(str) {
   return String(str).replace(/[&<>"']/g, m => ({
@@ -140,7 +140,7 @@ setInterval(() => {
   }
 }, 5000);
 
-// Abrir modal o mostrar aviso de lista cerrada
+// Abrir modal o mostrar aviso de lista cerrada a las 12:00 PM
 btnAbrir.addEventListener('click', () => {
   if (Date.now() >= FECHA_CIERRE) {
     actualizarEstadoVisualBoton('LISTA CERRADA');
