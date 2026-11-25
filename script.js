@@ -20,9 +20,9 @@ const alertTitle = document.getElementById('customAlertTitle');
 const alertBody = document.getElementById('customAlertBody');
 const btnCerrarAlerta = document.getElementById('btnCerrarAlerta');
 
-// Configuración de cierre automático (500 invitados o miércoles 2 de diciembre medianoche)
+// MODO PRUEBA: Configurado a las 9:00 AM de hoy miércoles 25 de noviembre
 const LIMITE_INVITADOS = 500;
-const FECHA_CIERRE = new Date('2026-12-02T23:59:59-05:00').getTime();
+const FECHA_CIERRE = new Date('2026-11-25T09:00:00-05:00').getTime();
 
 function escapeHTML(str) {
   return String(str).replace(/[&<>"']/g, m => ({
@@ -41,6 +41,18 @@ function mostrarVentanaEmergente(tipo, titulo, htmlMensaje, textoBoton) {
   alertBody.innerHTML = htmlMensaje;
   btnCerrarAlerta.textContent = textoBoton;
   alertModal.classList.add('active');
+}
+
+// Mensaje formal y didáctico con temática Vegas Night al cerrar la lista
+function mostrarAvisoCierreLista() {
+  mostrarVentanaEmergente(
+    'duplicado',
+    'LISTA OFICIAL CERRADA',
+    `¡Muchas gracias por tu interés en acompañar a <strong>Cristel</strong> en su noche mágica!<br><br>
+    Te informamos que el plazo de confirmación concluyó hoy <strong>miércoles 25 de noviembre a las 12:00 p. m.</strong>, ya que hemos cerrado nuestra lista oficial para la organización de mesas y control de acceso.<br>
+    <span class="alert-sub-text">✦ Agradecemos profundamente tu comprensión y tus buenos deseos.</span>`,
+    'ENTENDIDO'
+  );
 }
 
 btnCerrarAlerta.addEventListener('click', () => {
@@ -90,16 +102,15 @@ actualizarCronometro();
 setInterval(actualizarCronometro, 1000);
 
 // ================= CIERRE AUTOMÁTICO DEL BOTÓN DE ASISTENCIA =================
-function deshabilitarBotonAsistencia(motivo = 'REGISTRO CERRADO') {
+function actualizarEstadoVisualBoton(motivo = 'LISTA CERRADA') {
   if (!btnAbrir) return;
-  btnAbrir.disabled = true;
   btnAbrir.textContent = motivo;
   modal.classList.remove('active');
 }
 
 async function verificarEstadoRegistro() {
   if (Date.now() >= FECHA_CIERRE) {
-    deshabilitarBotonAsistencia('REGISTRO CERRADO');
+    actualizarEstadoVisualBoton('LISTA CERRADA');
     return;
   }
 
@@ -109,7 +120,9 @@ async function verificarEstadoRegistro() {
       .select('*', { count: 'exact', head: true });
 
     if (!error && count >= LIMITE_INVITADOS) {
-      deshabilitarBotonAsistencia('AFORO COMPLETO');
+      btnAbrir.disabled = true;
+      btnAbrir.textContent = 'AFORO COMPLETO';
+      modal.classList.remove('active');
       mostrarVentanaEmergente(
         'duplicado',
         'AFORO COMPLETO',
@@ -122,13 +135,19 @@ async function verificarEstadoRegistro() {
 
 verificarEstadoRegistro();
 setInterval(() => {
-  if (Date.now() >= FECHA_CIERRE) {
-    deshabilitarBotonAsistencia('REGISTRO CERRADO');
+  if (Date.now() >= FECHA_CIERRE && btnAbrir.textContent !== 'LISTA CERRADA') {
+    actualizarEstadoVisualBoton('LISTA CERRADA');
   }
-}, 10000);
+}, 5000);
 
-// Abrir y cerrar modal
+// Abrir modal o mostrar aviso de lista cerrada
 btnAbrir.addEventListener('click', () => {
+  if (Date.now() >= FECHA_CIERRE) {
+    actualizarEstadoVisualBoton('LISTA CERRADA');
+    mostrarAvisoCierreLista();
+    return;
+  }
+
   mensajeBox.style.display = 'none';
   modal.classList.add('active');
 });
@@ -161,6 +180,12 @@ radiosTipo.forEach(radio => {
 formulario.addEventListener('submit', async (evento) => {
   evento.preventDefault();
 
+  if (Date.now() >= FECHA_CIERRE) {
+    actualizarEstadoVisualBoton('LISTA CERRADA');
+    mostrarAvisoCierreLista();
+    return;
+  }
+
   const nombre = document.getElementById('nombreCompleto').value.trim().replace(/\s+/g, ' ');
   const opcionElegida = document.querySelector('input[name="tipoInvitado"]:checked').value;
 
@@ -173,22 +198,7 @@ formulario.addEventListener('submit', async (evento) => {
   btnSubmit.disabled = true;
   btnSubmit.textContent = 'VERIFICANDO...';
 
-  // Guardar en Supabase
   if (db) {
-    // 0. Verificar cierre por fecha o límite de 500 registrados antes de procesar
-    if (Date.now() >= FECHA_CIERRE) {
-      btnSubmit.disabled = false;
-      btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
-      deshabilitarBotonAsistencia('REGISTRO CERRADO');
-      mostrarVentanaEmergente(
-        'duplicado',
-        'REGISTRO CERRADO',
-        'El plazo para confirmar asistencia ha finalizado.<br><br>Agradecemos mucho tu interés en acompañarnos.',
-        'ENTENDIDO'
-      );
-      return;
-    }
-
     const { count: totalRegistrados, error: errorConteo } = await db
       .from('invitados')
       .select('*', { count: 'exact', head: true });
@@ -196,7 +206,9 @@ formulario.addEventListener('submit', async (evento) => {
     if (!errorConteo && totalRegistrados >= LIMITE_INVITADOS) {
       btnSubmit.disabled = false;
       btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
-      deshabilitarBotonAsistencia('AFORO COMPLETO');
+      btnAbrir.disabled = true;
+      btnAbrir.textContent = 'AFORO COMPLETO';
+      modal.classList.remove('active');
       mostrarVentanaEmergente(
         'duplicado',
         'AFORO COMPLETO',
@@ -206,7 +218,6 @@ formulario.addEventListener('submit', async (evento) => {
       return;
     }
 
-    // 1. Verificar si el nombre ya existe en la lista
     const { data: existentes, error: errorBusqueda } = await db
       .from('invitados')
       .select('nombre_completo')
@@ -226,7 +237,6 @@ formulario.addEventListener('submit', async (evento) => {
       return;
     }
 
-    // Si ya está registrado, mostrar ventana emergente y detener
     if (existentes && existentes.length > 0) {
       btnSubmit.disabled = false;
       btnSubmit.textContent = 'ENVIAR CONFIRMACIÓN';
@@ -240,7 +250,6 @@ formulario.addEventListener('submit', async (evento) => {
       return;
     }
 
-    // 2. Si no existe, registrar
     btnSubmit.textContent = 'REGISTRANDO...';
 
     const { error } = await db
@@ -264,9 +273,9 @@ formulario.addEventListener('submit', async (evento) => {
       return;
     }
 
-    // Si con este registro se alcanzó el cupo 500, deshabilitar el botón de inmediato
     if (!errorConteo && (totalRegistrados + 1) >= LIMITE_INVITADOS) {
-      deshabilitarBotonAsistencia('AFORO COMPLETO');
+      btnAbrir.disabled = true;
+      btnAbrir.textContent = 'AFORO COMPLETO';
     }
   }
 
