@@ -48,15 +48,22 @@ function mostrarVentanaEmergente(tipo, titulo, htmlMensaje, textoBoton) {
   alertModal.classList.add('active');
 }
 
-// Mensaje dinámico según si cerró por hora, por aforo de 500, o por ambos
+// Mensaje dinámico según si cerró por hora, por aforo de 500, o por ambos + recordatorio notorio
 function mostrarAvisoCierreDinamico(porHora, porAforo) {
+  const avisoNotorioNombre = `
+    <div style="margin-top: 14px; padding: 10px 12px; background: rgba(184, 13, 25, 0.28); border: 1.5px solid #ff3b49; border-radius: 4px; color: #ffffff; font-family: 'Cinzel', serif; font-size: 11px; font-weight: 700; letter-spacing: 1px; line-height: 1.45; box-shadow: 0 0 12px rgba(255, 59, 73, 0.35);">
+      ⚠️ IMPORTANTE PARA EL INGRESO:<br>
+      <span style="color: #f3d299;">NO OLVIDES DAR EL MISMO NOMBRE QUE PUSISTE EN LA LISTA</span>
+    </div>
+  `;
+
   if (porHora && porAforo) {
     mostrarVentanaEmergente(
       'duplicado',
       'LISTA Y AFORO CERRADOS',
       `¡Muchas gracias por tu interés en acompañar a <strong>Cristel</strong> en su noche mágica!<br><br>
-      Te informamos que el registro ha finalizado por dos motivos: hemos alcanzado el límite máximo de <strong>500 invitados</strong> y el plazo de confirmación concluyó hoy <strong>miércoles 25 de noviembre a la medianoche</strong>.<br>
-      <span class="alert-sub-text">✦ Agradecemos profundamente tu comprensión y tus buenos deseos.</span>`,
+      Te informamos que el registro ha finalizado por dos motivos: hemos alcanzado el límite máximo de <strong>500 invitados</strong> y el plazo de confirmación concluyó hoy <strong>miércoles 25 de noviembre a la medianoche</strong>.
+      ${avisoNotorioNombre}`,
       'ENTENDIDO'
     );
   } else if (porAforo) {
@@ -64,8 +71,8 @@ function mostrarAvisoCierreDinamico(porHora, porAforo) {
       'duplicado',
       'AFORO COMPLETO',
       `¡Muchas gracias por tu interés en acompañar a <strong>Cristel</strong> en su noche mágica!<br><br>
-      Lamentamos informarte que hemos alcanzado el límite máximo de <strong>500 invitados registrados</strong>. Por capacidad del evento, ya no es posible registrar más ingresos.<br>
-      <span class="alert-sub-text">✦ Agradecemos profundamente tu comprensión y tus buenos deseos.</span>`,
+      Lamentamos informarte que hemos alcanzado el límite máximo de <strong>500 invitados registrados</strong>. Por capacidad del evento, ya no es posible registrar más ingresos.
+      ${avisoNotorioNombre}`,
       'ENTENDIDO'
     );
   } else if (porHora) {
@@ -73,8 +80,8 @@ function mostrarAvisoCierreDinamico(porHora, porAforo) {
       'duplicado',
       'LISTA OFICIAL CERRADA',
       `¡Muchas gracias por tu interés en acompañar a <strong>Cristel</strong> en su noche mágica!<br><br>
-      Te informamos que el plazo de confirmación concluyó hoy <strong>miércoles 25 de noviembre a la medianoche</strong>, ya que hemos cerrado nuestra lista oficial para la organización de mesas y control de acceso.<br>
-      <span class="alert-sub-text">✦ Agradecemos profundamente tu comprensión y tus buenos deseos.</span>`,
+      Te informamos que el plazo de confirmación concluyó hoy <strong>miércoles 25 de noviembre a la medianoche</strong>, ya que hemos cerrado nuestra lista oficial para la organización de mesas y control de acceso.
+      ${avisoNotorioNombre}`,
       'ENTENDIDO'
     );
   }
@@ -180,7 +187,6 @@ btnAbrir.addEventListener('click', async () => {
   const porHora = Date.now() >= FECHA_CIERRE;
   let porAforo = estadoCierreActual.cerradoPorAforo;
 
-  // Si ya figura cerrado, mostrar el aviso inmediato (y confirmar aforo si pasó la hora)
   if (porHora || porAforo) {
     const textoOriginal = btnAbrir.textContent;
     btnAbrir.textContent = 'VERIFICANDO...';
