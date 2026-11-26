@@ -20,9 +20,9 @@ const alertTitle = document.getElementById('customAlertTitle');
 const alertBody = document.getElementById('customAlertBody');
 const btnCerrarAlerta = document.getElementById('btnCerrarAlerta');
 
-// Configuración definitiva: 500 invitados O Medianoche de hoy Miércoles 25 de Noviembre 2026 (Hora Perú)
+// MODO PRUEBA: HOY Miércoles 25 de Noviembre 2026 a las 9:00 PM (21:00:00 Hora Perú)
 const LIMITE_INVITADOS = 500;
-const FECHA_CIERRE = new Date('2026-11-25T23:59:59-05:00').getTime();
+const FECHA_CIERRE = new Date('2026-11-25T21:00:00-05:00').getTime();
 
 let estadoCierreActual = {
   cerradoPorHora: false,
@@ -174,7 +174,7 @@ async function evaluarCondicionesCierre() {
 // Verificar al cargar la página
 evaluarCondicionesCierre();
 
-// Revisar cada 5 segundos si llegó la medianoche (y verificar aforo si aún no cierra)
+// Revisar cada 5 segundos si llegó la hora de cierre
 setInterval(() => {
   const porHora = Date.now() >= FECHA_CIERRE;
   if (porHora && !estadoCierreActual.cerradoPorHora) {
@@ -242,7 +242,6 @@ formulario.addEventListener('submit', async (evento) => {
   btnSubmit.textContent = 'VERIFICANDO...';
 
   if (db) {
-    // 0. Evaluar si se cumplió la hora (medianoche), el aforo (500) o ambos
     const porHora = Date.now() >= FECHA_CIERRE;
     const { count: totalRegistrados, error: errorConteo } = await db
       .from('invitados')
@@ -258,7 +257,6 @@ formulario.addEventListener('submit', async (evento) => {
       return;
     }
 
-    // 1. Verificar si el nombre ya existe en la lista
     const { data: existentes, error: errorBusqueda } = await db
       .from('invitados')
       .select('nombre_completo')
@@ -291,7 +289,6 @@ formulario.addEventListener('submit', async (evento) => {
       return;
     }
 
-    // 2. Si no existe, registrar
     btnSubmit.textContent = 'REGISTRANDO...';
 
     const { error } = await db
@@ -315,7 +312,6 @@ formulario.addEventListener('submit', async (evento) => {
       return;
     }
 
-    // Si con este registro se llegó al invitado 500, actualizar estado del botón al instante
     if (!errorConteo && (totalRegistrados + 1) >= LIMITE_INVITADOS) {
       actualizarEstadoVisualBoton(Date.now() >= FECHA_CIERRE, true);
     }
