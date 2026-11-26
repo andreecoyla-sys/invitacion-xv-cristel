@@ -9,14 +9,17 @@ const loginError = document.getElementById('loginError');
 const togglePass = document.getElementById('togglePass');
 const adminPassword = document.getElementById('adminPassword');
 
-// Elementos del modal agregar invitado
+// Elementos del modal (ahora sirve para Agregar y Editar)
 const modalAgregar = document.getElementById('modalAgregar');
+const modalTitle = modalAgregar.querySelector('.modal-title');
+const modalSub = modalAgregar.querySelector('.modal-sub');
 const btnAbrirAgregar = document.getElementById('btnAbrirAgregar');
 const btnCerrarAgregar = document.getElementById('btnCerrarAgregar');
 const formAgregarInvitado = document.getElementById('formAgregarInvitado');
 const radiosNuevoTipo = document.querySelectorAll('input[name="nuevoTipo"]');
 const grupoNuevoColegio = document.getElementById('grupoNuevoColegio');
 const inputNuevoColegio = document.getElementById('nuevoColegio');
+const btnGuardarInvitado = document.getElementById('btnGuardarInvitado');
 
 const SVG_EYE_OPEN = `
   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -30,7 +33,14 @@ const SVG_EYE_CLOSED = `
     <line x1="1" y1="1" x2="23" y2="23"></line>
   </svg>`;
 
+const SVG_PENCIL = `
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+  </svg>`;
+
 let listaGlobal = [];
+let idEditando = null; // null = agregando nuevo, número = editando existente
 
 // Mostrar u ocultar contraseña con ícono SVG
 togglePass.addEventListener('click', () => {
@@ -39,21 +49,56 @@ togglePass.addEventListener('click', () => {
   togglePass.innerHTML = esOculta ? SVG_EYE_CLOSED : SVG_EYE_OPEN;
 });
 
-// ================= MODAL AGREGAR INVITADO =================
+// ================= MODAL AGREGAR / EDITAR INVITADO =================
 btnAbrirAgregar.addEventListener('click', () => {
+  idEditando = null;
+  modalTitle.textContent = 'Agregar Invitado';
+  modalSub.textContent = 'REGISTRO MANUAL • PANEL VIP';
+  btnGuardarInvitado.textContent = 'GUARDAR EN LISTA';
+
   formAgregarInvitado.reset();
   grupoNuevoColegio.style.display = 'block';
   inputNuevoColegio.required = true;
   modalAgregar.classList.add('active');
 });
 
+function abrirModalEditar(id) {
+  const invitado = listaGlobal.find(i => i.id === id);
+  if (!invitado) return;
+
+  idEditando = id;
+  modalTitle.textContent = 'Editar Invitado';
+  modalSub.textContent = 'MODIFICAR DATOS • PANEL VIP';
+  btnGuardarInvitado.textContent = 'GUARDAR CAMBIOS';
+
+  document.getElementById('nuevoNombre').value = invitado.nombre_completo || '';
+
+  const noEstaEnColegio = normalizarTexto(invitado.colegio) === 'no estoy en el colegio';
+
+  if (noEstaEnColegio) {
+    document.querySelector('input[name="nuevoTipo"][value="no_colegio"]').checked = true;
+    grupoNuevoColegio.style.display = 'none';
+    inputNuevoColegio.required = false;
+    inputNuevoColegio.value = '';
+  } else {
+    document.querySelector('input[name="nuevoTipo"][value="colegio"]').checked = true;
+    grupoNuevoColegio.style.display = 'block';
+    inputNuevoColegio.required = true;
+    inputNuevoColegio.value = invitado.colegio || '';
+  }
+
+  modalAgregar.classList.add('active');
+}
+
 btnCerrarAgregar.addEventListener('click', () => {
   modalAgregar.classList.remove('active');
+  idEditando = null;
 });
 
 modalAgregar.addEventListener('click', (e) => {
   if (e.target === modalAgregar) {
     modalAgregar.classList.remove('active');
+    idEditando = null;
   }
 });
 
@@ -79,11 +124,41 @@ formAgregarInvitado.addEventListener('submit', async (e) => {
     ? inputNuevoColegio.value.trim()
     : 'No estoy en el colegio';
 
-  const btnGuardar = document.getElementById('btnGuardarInvitado');
+  btnGuardarInvitado.disabled = true;
+  btnGuardarInvitado.textContent = 'GUARDANDO...';
 
-  btnGuardar.disabled = true;
-  btnGuardar.textContent = 'GUARDANDO...';
+  if (idEditando !== null) {
+    // MODO EDICIÓN
+    const { error } = await db
+      .from('invitados')
+      .update({
+        nombre_completo: nombre,
+        colegio: colegioFinal
+      })
+      .eq('id', idEditando);
 
+    btnGuardarInvitado.disabled = false;
+    btnGuardarInvitado.textContent = 'GUARDAR CAMBIOS';
+
+    if (error) {
+      alert('Error al actualizar los datos en Supabase.');
+      console.error(error);
+      return;
+    }
+
+    const item = listaGlobal.find(i => i.id === idEditando);
+    if (item) {
+      item.nombre_completo = nombre;
+      item.colegio = colegioFinal;
+    }
+
+    filtrar();
+    idEditando = null;
+    modalAgregar.classList.remove('active');
+    return;
+  }
+
+  // MODO NUEVO INVITADO
   const { data, error } = await db
     .from('invitados')
     .insert([{
@@ -93,8 +168,8 @@ formAgregarInvitado.addEventListener('submit', async (e) => {
     }])
     .select();
 
-  btnGuardar.disabled = false;
-  btnGuardar.textContent = 'GUARDAR EN LISTA';
+  btnGuardarInvitado.disabled = false;
+  btnGuardarInvitado.textContent = 'GUARDAR EN LISTA';
 
   if (error) {
     alert('Error al guardar el invitado en Supabase.');
@@ -226,7 +301,19 @@ function renderizarTabla(datos) {
 
     return `
       <tr>
-        <td><strong>${nombreSeguro}</strong></td>
+        <td>
+          <div style="display:flex; align-items:center; gap:8px;">
+            <button
+              type="button"
+              onclick="abrirModalEditar(${inv.id})"
+              title="Editar invitado"
+              style="background:none; border:none; color:#d4af73; cursor:pointer; padding:2px; display:inline-flex; align-items:center;"
+            >
+              ${SVG_PENCIL}
+            </button>
+            <strong>${nombreSeguro}</strong>
+          </div>
+        </td>
         <td>${colegioSeguro}</td>
         <td>
           <button
@@ -237,15 +324,7 @@ function renderizarTabla(datos) {
             ${asistio ? '✓ ASISTIÓ' : 'MARCAR INGRESO'}
           </button>
         </td>
-        <td style="display:flex; gap:6px; flex-wrap:wrap;">
-          <button
-            type="button"
-            class="btn-eliminar"
-            style="border-color:#d4af73; color:#f3d299;"
-            onclick="editarInvitado(${inv.id}, '${nombreJs}')"
-          >
-            EDITAR
-          </button>
+        <td>
           <button
             type="button"
             class="btn-eliminar"
@@ -257,33 +336,6 @@ function renderizarTabla(datos) {
       </tr>
     `;
   }).join('');
-}
-
-async function editarInvitado(id, nombreActual) {
-  const nuevoNombre = prompt('Editar nombre completo del invitado:', nombreActual);
-
-  if (nuevoNombre === null) return; // Usuario canceló
-
-  const nombreLimpio = nuevoNombre.trim();
-  if (!nombreLimpio || nombreLimpio === nombreActual) return;
-
-  const { error } = await db
-    .from('invitados')
-    .update({ nombre_completo: nombreLimpio })
-    .eq('id', id);
-
-  if (error) {
-    alert('No se pudo actualizar el nombre en Supabase.');
-    console.error(error);
-    return;
-  }
-
-  const item = listaGlobal.find(i => i.id === id);
-  if (item) {
-    item.nombre_completo = nombreLimpio;
-  }
-
-  filtrar();
 }
 
 async function cambiarAsistencia(id, nuevoEstado) {
