@@ -9,7 +9,7 @@ const loginError = document.getElementById('loginError');
 const togglePass = document.getElementById('togglePass');
 const adminPassword = document.getElementById('adminPassword');
 
-// Elementos del modal (ahora sirve para Agregar y Editar)
+// Elementos del modal (Agregar / Editar)
 const modalAgregar = document.getElementById('modalAgregar');
 const modalTitle = modalAgregar.querySelector('.modal-title');
 const modalSub = modalAgregar.querySelector('.modal-sub');
@@ -40,84 +40,70 @@ const SVG_PENCIL = `
   </svg>`;
 
 let listaGlobal = [];
-let idEditando = null; // null = agregando nuevo, número = editando existente
-let filtroCategoriaActual = 'todos';
+let idEditando = null;
 
-// Categorías de filtro por colegio (tolerante a variaciones y abreviaturas)
-const CATEGORIAS_FILTRO = [
-  { id: 'todos', label: 'Todos' },
+// Lista completa de opciones para el desplegable
+const OPCIONES_COLEGIO = [
+  { id: 'todos', label: 'Todos los colegios' },
   { id: 'no_colegio', label: 'No estoy en el colegio' },
   { id: 'san_francisco', label: 'San Francisco de Asís' },
   { id: 'san_vicente', label: 'San Vicente de Paúl' },
   { id: 'maria_auxiliadora', label: 'María Auxiliadora' },
   { id: 'la_place', label: 'La Place' },
   { id: 'la_florida', label: 'La Florida' },
+  { id: 'talents_schools', label: 'Talents Schools' },
+  { id: 'jose_carlos', label: 'José Carlos Mariátegui' },
+  { id: 'dean_valdivia', label: 'Dean Valdivia' },
+  { id: 'enrico_fermi', label: 'Enrico Fermi' },
+  { id: 'newton', label: 'Newton' },
   { id: 'otros', label: 'Otros' }
 ];
 
 function obtenerCategoriaColegio(colegioTexto) {
   const c = normalizarTexto(colegioTexto);
 
-  if (c === 'no estoy en el colegio' || c === 'no estoy en colegio') return 'no_colegio';
+  if (c === 'no estoy en el colegio' || c === 'no estoy en colegio' || c === '') return 'no_colegio';
   if (c.includes('san francisco') || c === 'sanfra' || c.includes('sanfra ')) return 'san_francisco';
   if (c.includes('san vicente')) return 'san_vicente';
   if (c.includes('maria auxiliadora')) return 'maria_auxiliadora';
   if (c.includes('la place') || c.includes('laplace')) return 'la_place';
   if (c.includes('la florida') || c === 'florida') return 'la_florida';
+  if (c.includes('talents')) return 'talents_schools';
+  if (c.includes('mariategui') || c.includes('mareategui') || c.includes('jose carlos')) return 'jose_carlos';
+  if (c.includes('dean valdivia') || c.includes('valdivia')) return 'dean_valdivia';
+  if (c.includes('enrico fermi') || c.includes('fermi')) return 'enrico_fermi';
+  if (c.includes('newton')) return 'newton';
 
   return 'otros';
 }
 
-function renderizarBotonesFiltro() {
-  const contenedor = document.getElementById('filtrosColegios');
-  if (!contenedor) return;
+function actualizarOpcionesDesplegable() {
+  const select = document.getElementById('filtroColegioSelect');
+  if (!select) return;
 
-  const conteos = {
-    todos: listaGlobal.length,
-    no_colegio: 0,
-    san_francisco: 0,
-    san_vicente: 0,
-    maria_auxiliadora: 0,
-    la_place: 0,
-    la_florida: 0,
-    otros: 0
-  };
+  const valorPrevio = select.value || 'todos';
+  const conteos = { todos: listaGlobal.length };
+
+  OPCIONES_COLEGIO.forEach(op => {
+    if (op.id !== 'todos') conteos[op.id] = 0;
+  });
 
   listaGlobal.forEach(inv => {
     const cat = obtenerCategoriaColegio(inv.colegio);
-    conteos[cat]++;
+    if (conteos[cat] !== undefined) {
+      conteos[cat]++;
+    } else {
+      conteos.otros++;
+    }
   });
 
-  contenedor.innerHTML = CATEGORIAS_FILTRO.map(cat => {
-    const activo = filtroCategoriaActual === cat.id;
-    return `
-      <button
-        type="button"
-        onclick="seleccionarFiltro('${cat.id}')"
-        style="
-          background: ${activo ? '#d4af73' : 'rgba(28, 10, 12, 0.85)'};
-          color: ${activo ? '#1c0a0c' : '#f3d299'};
-          border: 1px solid #d4af73;
-          padding: 6px 12px;
-          border-radius: 6px;
-          font-family: 'Cinzel', serif;
-          font-size: 11px;
-          font-weight: 700;
-          letter-spacing: 0.5px;
-          cursor: pointer;
-          transition: all 0.2s ease;
-        "
-      >
-        ${cat.label} (${conteos[cat.id]})
-      </button>
-    `;
-  }).join('');
-}
+  select.innerHTML = OPCIONES_COLEGIO.map(op => `
+    <option value="${op.id}" style="background:#1c0a0c; color:#f3d299;">
+      ${op.label} (${conteos[op.id]})
+    </option>
+  `).join('');
 
-function seleccionarFiltro(idCategoria) {
-  filtroCategoriaActual = idCategoria;
-  renderizarBotonesFiltro();
-  filtrar();
+  select.value = valorPrevio;
 }
 
 // Mostrar u ocultar contraseña con ícono SVG
@@ -206,7 +192,6 @@ formAgregarInvitado.addEventListener('submit', async (e) => {
   btnGuardarInvitado.textContent = 'GUARDANDO...';
 
   if (idEditando !== null) {
-    // MODO EDICIÓN
     const { error } = await db
       .from('invitados')
       .update({
@@ -230,14 +215,13 @@ formAgregarInvitado.addEventListener('submit', async (e) => {
       item.colegio = colegioFinal;
     }
 
-    renderizarBotonesFiltro();
+    actualizarOpcionesDesplegable();
     filtrar();
     idEditando = null;
     modalAgregar.classList.remove('active');
     return;
   }
 
-  // MODO NUEVO INVITADO
   const { data, error } = await db
     .from('invitados')
     .insert([{
@@ -259,7 +243,7 @@ formAgregarInvitado.addEventListener('submit', async (e) => {
   if (data && data.length > 0) {
     listaGlobal.unshift(data[0]);
     actualizarContadores();
-    renderizarBotonesFiltro();
+    actualizarOpcionesDesplegable();
     filtrar();
   } else {
     cargarInvitados();
@@ -337,7 +321,7 @@ async function cargarInvitados() {
 
   listaGlobal = data || [];
   actualizarContadores();
-  renderizarBotonesFiltro();
+  actualizarOpcionesDesplegable();
   filtrar();
 }
 
@@ -370,7 +354,7 @@ function renderizarTabla(datos) {
 
   if (!datos || datos.length === 0) {
     tbody.innerHTML =
-      '<tr><td colspan="4" style="text-align:center;">No hay registros en esta categoría.</td></tr>';
+      '<tr><td colspan="4" style="text-align:center;">No se encontraron coincidencias.</td></tr>';
     return;
   }
 
@@ -458,7 +442,7 @@ async function eliminarInvitado(id, nombre) {
 
   listaGlobal = listaGlobal.filter(i => i.id !== id);
   actualizarContadores();
-  renderizarBotonesFiltro();
+  actualizarOpcionesDesplegable();
   filtrar();
 }
 
@@ -472,23 +456,25 @@ function normalizarTexto(texto) {
 
 function filtrar() {
   const texto = normalizarTexto(document.getElementById('buscador').value);
+  const categoriaSeleccionada = document.getElementById('filtroColegioSelect').value;
 
   const filtrados = listaGlobal.filter(i => {
-    const cumpleCategoria =
-      filtroCategoriaActual === 'todos' ||
-      obtenerCategoriaColegio(i.colegio) === filtroCategoriaActual;
+    const cumpleColegio =
+      categoriaSeleccionada === 'todos' ||
+      obtenerCategoriaColegio(i.colegio) === categoriaSeleccionada;
 
     const cumpleTexto =
       !texto ||
       normalizarTexto(i.nombre_completo).includes(texto) ||
       normalizarTexto(i.colegio).includes(texto);
 
-    return cumpleCategoria && cumpleTexto;
+    return cumpleColegio && cumpleTexto;
   });
 
   renderizarTabla(filtrados);
 }
 
 document.getElementById('buscador').addEventListener('input', filtrar);
+document.getElementById('filtroColegioSelect').addEventListener('change', filtrar);
 
 verificarSesion();

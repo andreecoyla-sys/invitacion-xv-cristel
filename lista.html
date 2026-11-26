@@ -77,14 +77,23 @@
       </div>
     </div>
 
-    <input 
-      type="text" 
-      id="buscador" 
-      class="search-box" 
-      placeholder="Buscar por nombre o colegio..."
-    >
+    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:18px;">
+      <input 
+        type="text" 
+        id="buscador" 
+        class="search-box" 
+        placeholder="Buscar por nombre..."
+        style="flex:2; min-width:240px; margin-bottom:0;"
+      >
 
-    <div id="filtrosColegios" style="display:flex; flex-wrap:wrap; gap:8px; margin: 14px 0 18px 0;"></div>
+      <select 
+        id="filtroColegioSelect" 
+        class="search-box"
+        style="flex:1; min-width:240px; margin-bottom:0; cursor:pointer; background-color:#1c0a0c; color:#f3d299;"
+      >
+        <option value="todos">Todos los colegios</option>
+      </select>
+    </div>
 
     <div class="table-wrap">
       <table>
