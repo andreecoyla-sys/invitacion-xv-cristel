@@ -41,6 +41,84 @@ const SVG_PENCIL = `
 
 let listaGlobal = [];
 let idEditando = null; // null = agregando nuevo, número = editando existente
+let filtroCategoriaActual = 'todos';
+
+// Categorías de filtro por colegio (tolerante a variaciones y abreviaturas)
+const CATEGORIAS_FILTRO = [
+  { id: 'todos', label: 'Todos' },
+  { id: 'no_colegio', label: 'No estoy en el colegio' },
+  { id: 'san_francisco', label: 'San Francisco de Asís' },
+  { id: 'san_vicente', label: 'San Vicente de Paúl' },
+  { id: 'maria_auxiliadora', label: 'María Auxiliadora' },
+  { id: 'la_place', label: 'La Place' },
+  { id: 'la_florida', label: 'La Florida' },
+  { id: 'otros', label: 'Otros' }
+];
+
+function obtenerCategoriaColegio(colegioTexto) {
+  const c = normalizarTexto(colegioTexto);
+
+  if (c === 'no estoy en el colegio' || c === 'no estoy en colegio') return 'no_colegio';
+  if (c.includes('san francisco') || c === 'sanfra' || c.includes('sanfra ')) return 'san_francisco';
+  if (c.includes('san vicente')) return 'san_vicente';
+  if (c.includes('maria auxiliadora')) return 'maria_auxiliadora';
+  if (c.includes('la place') || c.includes('laplace')) return 'la_place';
+  if (c.includes('la florida') || c === 'florida') return 'la_florida';
+
+  return 'otros';
+}
+
+function renderizarBotonesFiltro() {
+  const contenedor = document.getElementById('filtrosColegios');
+  if (!contenedor) return;
+
+  const conteos = {
+    todos: listaGlobal.length,
+    no_colegio: 0,
+    san_francisco: 0,
+    san_vicente: 0,
+    maria_auxiliadora: 0,
+    la_place: 0,
+    la_florida: 0,
+    otros: 0
+  };
+
+  listaGlobal.forEach(inv => {
+    const cat = obtenerCategoriaColegio(inv.colegio);
+    conteos[cat]++;
+  });
+
+  contenedor.innerHTML = CATEGORIAS_FILTRO.map(cat => {
+    const activo = filtroCategoriaActual === cat.id;
+    return `
+      <button
+        type="button"
+        onclick="seleccionarFiltro('${cat.id}')"
+        style="
+          background: ${activo ? '#d4af73' : 'rgba(28, 10, 12, 0.85)'};
+          color: ${activo ? '#1c0a0c' : '#f3d299'};
+          border: 1px solid #d4af73;
+          padding: 6px 12px;
+          border-radius: 6px;
+          font-family: 'Cinzel', serif;
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        "
+      >
+        ${cat.label} (${conteos[cat.id]})
+      </button>
+    `;
+  }).join('');
+}
+
+function seleccionarFiltro(idCategoria) {
+  filtroCategoriaActual = idCategoria;
+  renderizarBotonesFiltro();
+  filtrar();
+}
 
 // Mostrar u ocultar contraseña con ícono SVG
 togglePass.addEventListener('click', () => {
@@ -152,6 +230,7 @@ formAgregarInvitado.addEventListener('submit', async (e) => {
       item.colegio = colegioFinal;
     }
 
+    renderizarBotonesFiltro();
     filtrar();
     idEditando = null;
     modalAgregar.classList.remove('active');
@@ -180,6 +259,7 @@ formAgregarInvitado.addEventListener('submit', async (e) => {
   if (data && data.length > 0) {
     listaGlobal.unshift(data[0]);
     actualizarContadores();
+    renderizarBotonesFiltro();
     filtrar();
   } else {
     cargarInvitados();
@@ -257,6 +337,7 @@ async function cargarInvitados() {
 
   listaGlobal = data || [];
   actualizarContadores();
+  renderizarBotonesFiltro();
   filtrar();
 }
 
@@ -289,7 +370,7 @@ function renderizarTabla(datos) {
 
   if (!datos || datos.length === 0) {
     tbody.innerHTML =
-      '<tr><td colspan="4" style="text-align:center;">No hay registros todavía.</td></tr>';
+      '<tr><td colspan="4" style="text-align:center;">No hay registros en esta categoría.</td></tr>';
     return;
   }
 
@@ -377,6 +458,7 @@ async function eliminarInvitado(id, nombre) {
 
   listaGlobal = listaGlobal.filter(i => i.id !== id);
   actualizarContadores();
+  renderizarBotonesFiltro();
   filtrar();
 }
 
@@ -391,15 +473,18 @@ function normalizarTexto(texto) {
 function filtrar() {
   const texto = normalizarTexto(document.getElementById('buscador').value);
 
-  if (!texto) {
-    renderizarTabla(listaGlobal);
-    return;
-  }
+  const filtrados = listaGlobal.filter(i => {
+    const cumpleCategoria =
+      filtroCategoriaActual === 'todos' ||
+      obtenerCategoriaColegio(i.colegio) === filtroCategoriaActual;
 
-  const filtrados = listaGlobal.filter(i =>
-    normalizarTexto(i.nombre_completo).includes(texto) ||
-    normalizarTexto(i.colegio).includes(texto)
-  );
+    const cumpleTexto =
+      !texto ||
+      normalizarTexto(i.nombre_completo).includes(texto) ||
+      normalizarTexto(i.colegio).includes(texto);
+
+    return cumpleCategoria && cumpleTexto;
+  });
 
   renderizarTabla(filtrados);
 }
