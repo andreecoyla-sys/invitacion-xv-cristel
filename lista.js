@@ -237,7 +237,15 @@ function renderizarTabla(datos) {
             ${asistio ? '✓ ASISTIÓ' : 'MARCAR INGRESO'}
           </button>
         </td>
-        <td>
+        <td style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button
+            type="button"
+            class="btn-eliminar"
+            style="border-color:#d4af73; color:#f3d299;"
+            onclick="editarInvitado(${inv.id}, '${nombreJs}')"
+          >
+            EDITAR
+          </button>
           <button
             type="button"
             class="btn-eliminar"
@@ -249,6 +257,33 @@ function renderizarTabla(datos) {
       </tr>
     `;
   }).join('');
+}
+
+async function editarInvitado(id, nombreActual) {
+  const nuevoNombre = prompt('Editar nombre completo del invitado:', nombreActual);
+
+  if (nuevoNombre === null) return; // Usuario canceló
+
+  const nombreLimpio = nuevoNombre.trim();
+  if (!nombreLimpio || nombreLimpio === nombreActual) return;
+
+  const { error } = await db
+    .from('invitados')
+    .update({ nombre_completo: nombreLimpio })
+    .eq('id', id);
+
+  if (error) {
+    alert('No se pudo actualizar el nombre en Supabase.');
+    console.error(error);
+    return;
+  }
+
+  const item = listaGlobal.find(i => i.id === id);
+  if (item) {
+    item.nombre_completo = nombreLimpio;
+  }
+
+  filtrar();
 }
 
 async function cambiarAsistencia(id, nuevoEstado) {
@@ -293,8 +328,16 @@ async function eliminarInvitado(id, nombre) {
   filtrar();
 }
 
+function normalizarTexto(texto) {
+  return String(texto || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim();
+}
+
 function filtrar() {
-  const texto = document.getElementById('buscador').value.trim().toLowerCase();
+  const texto = normalizarTexto(document.getElementById('buscador').value);
 
   if (!texto) {
     renderizarTabla(listaGlobal);
@@ -302,8 +345,8 @@ function filtrar() {
   }
 
   const filtrados = listaGlobal.filter(i =>
-    (i.nombre_completo || '').toLowerCase().includes(texto) ||
-    (i.colegio || '').toLowerCase().includes(texto)
+    normalizarTexto(i.nombre_completo).includes(texto) ||
+    normalizarTexto(i.colegio).includes(texto)
   );
 
   renderizarTabla(filtrados);
