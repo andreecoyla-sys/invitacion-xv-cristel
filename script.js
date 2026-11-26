@@ -20,9 +20,9 @@ const alertTitle = document.getElementById('customAlertTitle');
 const alertBody = document.getElementById('customAlertBody');
 const btnCerrarAlerta = document.getElementById('btnCerrarAlerta');
 
-// MODO PRUEBA: HOY Miércoles 25 de Noviembre 2026 a las 9:00 PM (21:00:00 Hora Perú)
+// CONFIGURACIÓN DEFINITIVA: 500 invitados O Medianoche de hoy Miércoles 25 de Noviembre 2026 (23:59:59 Hora Perú)
 const LIMITE_INVITADOS = 500;
-const FECHA_CIERRE = new Date('2026-11-25T21:00:00-05:00').getTime();
+const FECHA_CIERRE = new Date('2026-11-25T23:59:59-05:00').getTime();
 
 let estadoCierreActual = {
   cerradoPorHora: false,
@@ -174,7 +174,7 @@ async function evaluarCondicionesCierre() {
 // Verificar al cargar la página
 evaluarCondicionesCierre();
 
-// Revisar cada 5 segundos si llegó la hora de cierre
+// Revisar cada 5 segundos si llegó la medianoche
 setInterval(() => {
   const porHora = Date.now() >= FECHA_CIERRE;
   if (porHora && !estadoCierreActual.cerradoPorHora) {
